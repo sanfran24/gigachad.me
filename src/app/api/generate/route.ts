@@ -28,15 +28,11 @@ export async function POST(request: NextRequest) {
     const buffer = Buffer.from(imageArrayBuffer)
     console.log('Image buffer size:', buffer.length)
 
-    // Create a simple white mask programmatically
+    // Create a simple white mask as base64 PNG (1x1 white pixel)
     const createWhiteMask = () => {
-      const canvas = require('canvas')
-      const { createCanvas } = canvas
-      const maskCanvas = createCanvas(1024, 1024)
-      const ctx = maskCanvas.getContext('2d')
-      ctx.fillStyle = 'white'
-      ctx.fillRect(0, 0, 1024, 1024)
-      return maskCanvas.toBuffer('image/png')
+      // This is a 1x1 white PNG in base64
+      const whitePixelBase64 = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg=='
+      return Buffer.from(whitePixelBase64, 'base64')
     }
 
     // Create form data for images/edits with mask
