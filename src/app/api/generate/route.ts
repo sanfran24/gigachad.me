@@ -28,49 +28,36 @@ export async function POST(request: NextRequest) {
     const buffer = Buffer.from(imageArrayBuffer)
     console.log('Image buffer size:', buffer.length)
 
-    // Create a simple white mask as base64 PNG (1x1 white pixel)
-    const createWhiteMask = () => {
-      // This is a 1x1 white PNG in base64
-      const whitePixelBase64 = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg=='
-      return Buffer.from(whitePixelBase64, 'base64')
-    }
-
-    // Create form data for images/edits with mask
-    const openaiFormData = new FormData()
-    openaiFormData.append('image', buffer, {
-      filename: 'image.png',
-      contentType: 'image/png'
-    })
+    // Use DALL-E 3 generations (no mask needed, simpler approach)
+    console.log('Calling OpenAI DALL-E 3 generations endpoint...')
     
-    // Create white mask programmatically
-    const maskBuffer = createWhiteMask()
-    openaiFormData.append('mask', maskBuffer, {
-      filename: 'mask.png',
-      contentType: 'image/png'
-    })
-    
-    openaiFormData.append('prompt', prompt)
-    openaiFormData.append('size', '1024x1024')
-    openaiFormData.append('n', '1')
-
-    console.log('Calling OpenAI images/edits endpoint...')
-    
-    // Call OpenAI images/edits endpoint with mask
-    const response = await axios.post('https://api.openai.com/v1/images/edits', openaiFormData, {
+    const response = await axios.post('https://api.openai.com/v1/images/generations', {
+      model: 'dall-e-3',
+      prompt: prompt,
+      n: 1,
+      size: '1024x1024',
+      quality: 'standard'
+    }, {
       headers: {
         'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
-        ...openaiFormData.getHeaders()
+        'Content-Type': 'application/json'
       }
     })
 
     console.log('OpenAI response received:', !!response.data)
 
     const resp = response.data
-    const b64 = resp?.data?.[0]?.b64_json
+    const url = resp?.data?.[0]?.url
 
-    if (!b64) {
+    if (!url) {
       return NextResponse.json({ error: 'No image data from OpenAI' }, { status: 500, headers })
     }
+
+    console.log('Downloading image from URL...')
+    // Download image from URL
+    const imageResponse = await fetch(url)
+    const imageBuffer = await imageResponse.arrayBuffer()
+    const b64 = Buffer.from(imageBuffer).toString('base64')
 
     console.log('Returning image, base64 length:', b64.length)
     // Return the generated image
