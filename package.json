@@ -5,7 +5,8 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "nodemon server.js"
+    "dev": "nodemon server.js",
+    "build": "echo 'No build step required for Express.js app'"
   },
   "keywords": ["gigachad", "image", "transformation", "ai", "openai"],
   "author": "Gigachad Bot",
