@@ -3,15 +3,15 @@ import FormData from 'form-data'
 import axios from 'axios'
 
 export async function POST(request: NextRequest) {
+  // Handle CORS - moved outside try block
+  const headers = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type',
+  }
+  
   try {
     console.log('API called - starting generation...')
-    
-    // Handle CORS
-    const headers = {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'POST, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type',
-    }
     
     const formData = await request.formData()
     const image = formData.get('image') as File
@@ -24,51 +24,57 @@ export async function POST(request: NextRequest) {
     }
 
     // Convert image to buffer
-    const imageBuffer = await image.arrayBuffer()
-    const buffer = Buffer.from(imageBuffer)
+    const imageArrayBuffer = await image.arrayBuffer()
+    const buffer = Buffer.from(imageArrayBuffer)
     console.log('Image buffer size:', buffer.length)
 
-    // Create form data exactly like the original template
+    // Create a simple white mask programmatically
+    const createWhiteMask = () => {
+      const canvas = require('canvas')
+      const { createCanvas } = canvas
+      const maskCanvas = createCanvas(1024, 1024)
+      const ctx = maskCanvas.getContext('2d')
+      ctx.fillStyle = 'white'
+      ctx.fillRect(0, 0, 1024, 1024)
+      return maskCanvas.toBuffer('image/png')
+    }
+
+    // Create form data for images/edits with mask
     const openaiFormData = new FormData()
     openaiFormData.append('image', buffer, {
       filename: 'image.png',
       contentType: 'image/png'
     })
+    
+    // Create white mask programmatically
+    const maskBuffer = createWhiteMask()
+    openaiFormData.append('mask', maskBuffer, {
+      filename: 'mask.png',
+      contentType: 'image/png'
+    })
+    
     openaiFormData.append('prompt', prompt)
     openaiFormData.append('size', '1024x1024')
     openaiFormData.append('n', '1')
-    openaiFormData.append('model', 'gpt-image-1')
 
     console.log('Calling OpenAI images/edits endpoint...')
     
-    // Call OpenAI images/generations endpoint instead of edits
-    const response = await axios.post('https://api.openai.com/v1/images/generations', {
-      model: 'dall-e-3',
-      prompt: prompt,
-      n: 1,
-      size: '1024x1024',
-      quality: 'standard'
-    }, {
+    // Call OpenAI images/edits endpoint with mask
+    const response = await axios.post('https://api.openai.com/v1/images/edits', openaiFormData, {
       headers: {
         'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
-        'Content-Type': 'application/json'
+        ...openaiFormData.getHeaders()
       }
     })
 
     console.log('OpenAI response received:', !!response.data)
 
     const resp = response.data
-    const url = resp?.data?.[0]?.url
+    const b64 = resp?.data?.[0]?.b64_json
 
-    if (!url) {
+    if (!b64) {
       return NextResponse.json({ error: 'No image data from OpenAI' }, { status: 500, headers })
     }
-
-    console.log('Downloading image from URL...')
-    // Download image from URL
-    const imageResponse = await fetch(url)
-    const imageBuffer = await imageResponse.arrayBuffer()
-    const b64 = Buffer.from(imageBuffer).toString('base64')
 
     console.log('Returning image, base64 length:', b64.length)
     // Return the generated image
@@ -83,7 +89,13 @@ export async function POST(request: NextRequest) {
 
   } catch (error) {
     console.error('Generation error:', error)
-    return NextResponse.json({ error: 'Internal server error', details: error instanceof Error ? error.message : 'Unknown error' }, { status: 500, headers })
+    return NextResponse.json({ 
+      error: 'Internal server error', 
+      details: error instanceof Error ? error.message : 'Unknown error' 
+    }, { 
+      status: 500, 
+      headers 
+    })
   }
 }
 
