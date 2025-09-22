@@ -1,83 +1,83 @@
-# 💪 Gigachadify Bot
+# Gigachad Bot 💪
 
-Transform any photo into a Gigachad meme with AI-powered image generation.
+Transform any photo into a Gigachad masterpiece with AI-powered image transformation.
 
 ## Features
-- 🎨 5 different Gigachad transformation styles
-- 🖼️ AI-powered image generation using OpenAI
-- 📱 Responsive design
-- 🎭 Scattered animated quotes
-- 🖼️ Custom wallpaper background
 
-## Live Demo
-- **Main Site**: [Your Namecheap Domain]
-- **Bot**: [Your Render URL]
+* 🎨 **5 Gigachad Styles**: OG Gigachad, Mog Chad, Cartoon Gigachad, Troll Gigachad, Brainrot Gigachad
+* 📸 **Image Upload**: Upload any image format (jpg, png, gif, webp, etc.)
+* 🔄 **True Image-to-Image**: Uses your actual uploaded photo as the base
+* 💪 **Gigachad Transformation**: Adds exaggerated jawlines, muscles, and meme expressions
+* 🌐 **Web Interface**: Beautiful website with scrollable quotes and wallpaper
+* 📱 **Responsive**: Works on desktop and mobile
 
-## Tech Stack
-- Next.js 14
-- TypeScript
-- OpenAI API
-- Tailwind CSS
+## How It Works
+
+1. Upload an image
+2. Choose a Gigachad style
+3. The bot uses OpenAI's images/edits endpoint to transform your photo
+4. Download your Gigachad masterpiece
 
 ## Local Development
 
-1. **Clone the repository**
-   ```bash
-   git clone [your-repo-url]
-   cd gigachadify-bot
-   ```
+1. Install dependencies:  
+```bash
+npm install
+```
 
-2. **Install dependencies**
-   ```bash
-   npm install
-   ```
+2. Create `.env` file with your OpenAI API key:  
+```bash
+OPENAI_API_KEY=your_api_key_here
+```
 
-3. **Set up environment variables**
-   ```bash
-   cp .env.example .env.local
-   # Add your OPENAI_API_KEY to .env.local
-   ```
+3. Start the server:  
+```bash
+npm start
+```
 
-4. **Run development server**
-   ```bash
-   npm run dev
-   ```
+4. Open <http://localhost:3000>
 
-## Deployment on Render
+## Deployment
 
-1. **Connect to Render**
-   - Link your GitHub repository
-   - Or upload the code directly
+### Render
 
-2. **Environment Variables**
-   ```
-   OPENAI_API_KEY=your_openai_api_key_here
-   NODE_ENV=production
-   ```
+1. Push your code to GitHub
+2. Connect your GitHub repo to Render
+3. Set environment variable: `OPENAI_API_KEY`
+4. Deploy!
 
-3. **Build Settings**
-   - **Build Command**: `npm install && npm run build`
-   - **Start Command**: `npm start`
-   - **Node Version**: 18.x
+### Namecheap
+
+1. Upload the files to your hosting
+2. Run `npm install` on the server
+3. Set environment variable: `OPENAI_API_KEY`
+4. Start with `npm start`
+
+## Environment Variables
+
+* `OPENAI_API_KEY`: Your OpenAI API key (required)
+* `PORT`: Port number (default: 3000)
 
 ## API Endpoints
 
-### POST /api/generate
-Transform an image into a Gigachad meme.
+* `GET /` - Main website with quotes
+* `GET /bot` - Bot interface
+* `POST /transform` - Transform image
+* `GET /result/:imageId` - Get transformed image
+* `GET /health` - Health check
 
-**Request:**
-- `image`: Image file (multipart/form-data)
-- `prompt`: Transformation prompt
+## Technologies Used
 
-**Response:**
-- Generated image (PNG)
-
-## Gigachad Styles
-1. **OG Gigachad** 💪 - Classic meme style
-2. **Mog Chad** 🔥 - Dominant presence
-3. **Cartoon Gigachad** 🎨 - Comic book style
-4. **Troll Gigachad** 😈 - Mischievous grin
-5. **Brainrot Gigachad** 🧠 - Chaotic neon style
+* Node.js
+* Express.js
+* OpenAI API (images/edits)
+* Multer (file uploads)
+* HTML/CSS/JavaScript
 
 ## License
+
 MIT
+
+## About
+
+Transform any photo into a Gigachad masterpiece. Stay sharp! 💪

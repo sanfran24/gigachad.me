@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giga Chad Energy</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 16 16%22><text y=%2214%22 font-size=%2216%22>💪</text></svg>">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-image: url('./wp13049510.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            font-family: 'Inter', 'Impact', 'Arial Black', sans-serif;
+            font-weight: 900;
+            letter-spacing: 1px;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            z-index: -1;
+        }
+        
+        .shade {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(0,0,0,0.1), rgba(0,0,0,0.3));
+            z-index: -1;
+        }
+        
+        .content {
+            position: relative;
+            z-index: 1;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+        
+        .page-header {
+            text-align: center;
+            margin-bottom: 60px;
+            color: white;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8);
+        }
+        
+        .page-header h1 {
+            font-size: 4rem;
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            font-weight: 900;
+        }
+        
+        .page-header p {
+            font-size: 1.4rem;
+            margin: 20px 0;
+            font-weight: 700;
+        }
+        
+        .quotes {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+        
+        blockquote {
+            background: rgba(0, 0, 0, 0.7);
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 15px;
+            padding: 25px;
+            color: white;
+            font-size: 1.2rem;
+            font-weight: 700;
+            text-align: center;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+            position: relative;
+            transform: rotate(0deg);
+            transition: all 0.3s ease;
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        blockquote:nth-child(odd) {
+            transform: rotate(-2deg);
+            animation-delay: -2s;
+        }
+        
+        blockquote:nth-child(even) {
+            transform: rotate(2deg);
+            animation-delay: -4s;
+        }
+        
+        blockquote:nth-child(3n) {
+            transform: rotate(1deg);
+            animation-delay: -1s;
+        }
+        
+        blockquote:nth-child(5n) {
+            transform: rotate(-1deg);
+            animation-delay: -3s;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(var(--rotation, 0deg)); }
+            50% { transform: translateY(-10px) rotate(var(--rotation, 0deg)); }
+        }
+        
+        .page-footer {
+            text-align: center;
+            margin-top: 60px;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+        }
+        
+        .page-footer p {
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+        
+        .bot-link {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 15px 30px;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .bot-link:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+        }
+        
+        @media (max-width: 768px) {
+            .page-header h1 {
+                font-size: 2.5rem;
+            }
+            
+            .quotes {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            blockquote {
+                font-size: 1rem;
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="shade" aria-hidden="true"></div>
+    <main class="content" role="main">
+        <header class="page-header">
+            <h1>Giga Chad Energy</h1>
+            <p>Scroll to channel the alpha. Wallpaper pans as you go.</p>
+        </header>
+
+        <section class="quotes" aria-label="Giga Chad Quotes">
+            <blockquote>Become the kind of person your future self thanks.</blockquote>
+            <blockquote>Discipline beats motivation. Show up, no matter what.</blockquote>
+            <blockquote>Comfort is a cage. Step out and grow.</blockquote>
+            <blockquote>Results talk. Excuses walk.</blockquote>
+            <blockquote>Grind in silence. Let success be the noise.</blockquote>
+            <blockquote>One more rep. One more page. One more step.</blockquote>
+            <blockquote>You're not tired. You're just untrained.</blockquote>
+            <blockquote>Stay dangerous. Stay humble.</blockquote>
+            <blockquote>Pressure creates diamonds. Embrace it.</blockquote>
+            <blockquote>Win the morning. Win the day.</blockquote>
+            <blockquote>Keep promises you make to yourself.</blockquote>
+            <blockquote>Small habits. Massive outcomes.</blockquote>
+            <blockquote>Suffer now. Live like a king later.</blockquote>
+            <blockquote>Focus is the new superpower.</blockquote>
+            <blockquote>Be so consistent it looks like magic.</blockquote>
+            <blockquote>Hunger over comfort. Always.</blockquote>
+            <blockquote>Your standards build your reality.</blockquote>
+            <blockquote>Prove your doubt wrong.</blockquote>
+            <blockquote>Choose pain of discipline over pain of regret.</blockquote>
+            <blockquote>Earn your confidence daily.</blockquote>
+            <blockquote>Hard choices, easy life. Easy choices, hard life.</blockquote>
+            <blockquote>Train your mind harder than your body.</blockquote>
+            <blockquote>Silence the inner critic with action.</blockquote>
+            <blockquote>Make progress too obvious to ignore.</blockquote>
+            <blockquote>Your future is counting on you.</blockquote>
+            <blockquote>Delete distractions. Build momentum.</blockquote>
+            <blockquote>Respect is earned, not demanded.</blockquote>
+            <blockquote>Be reliable. Be relentless.</blockquote>
+            <blockquote>High standards. Zero drama.</blockquote>
+            <blockquote>Keep it moving. No emotional luggage.</blockquote>
+            <blockquote>Own your mornings. Own your life.</blockquote>
+            <blockquote>Hustle quietly, dominate loudly.</blockquote>
+            <blockquote>Character is what you do when no one is watching.</blockquote>
+            <blockquote>Reps make results.</blockquote>
+            <blockquote>Stop negotiating with your goals.</blockquote>
+            <blockquote>Get uncomfortable, get unstoppable.</blockquote>
+            <blockquote>Mindset first. Skillset second.</blockquote>
+            <blockquote>Dreams demand receipts.</blockquote>
+            <blockquote>Work until your idols become rivals.</blockquote>
+            <blockquote>Outwork your old self.</blockquote>
+            <blockquote>Ruthless with habits. Kind with people.</blockquote>
+            <blockquote>Stand tall. Speak less. Do more.</blockquote>
+            <blockquote>Your pace is fine; just don't stop.</blockquote>
+            <blockquote>Eat discipline for breakfast.</blockquote>
+            <blockquote>Make effort your baseline.</blockquote>
+            <blockquote>Momentum loves consistency.</blockquote>
+            <blockquote>Keep going. You're closer than you think.</blockquote>
+            <blockquote>Be the calm in the chaos.</blockquote>
+            <blockquote>Nobody is coming. Build yourself.</blockquote>
+            <blockquote>Winners do it tired.</blockquote>
+            <blockquote>The mission is bigger than the mood.</blockquote>
+        </section>
+
+        <footer class="page-footer">
+            <p>Made for the giga wallpaper. Stay sharp.</p>
+            <a href="/bot" class="bot-link">Transform Your Photo →</a>
+        </footer>
+    </main>
+
+    <script>
+    (function() {
+        function panBackground() {
+            var body = document.body;
+            var html = document.documentElement;
+            var scrollTop = window.pageYOffset || html.scrollTop || body.scrollTop || 0;
+            var docHeight = Math.max(
+                body.scrollHeight, body.offsetHeight,
+                html.clientHeight, html.scrollHeight, html.offsetHeight
+            );
+            var winHeight = window.innerHeight || html.clientHeight || 1;
+            var maxScroll = Math.max(docHeight - winHeight, 1);
+            var progress = Math.min(Math.max(scrollTop / maxScroll, 0), 1);
+            var y = (progress * 100).toFixed(2) + '%';
+            body.style.backgroundPosition = 'center ' + y;
+        }
+
+        panBackground();
+        window.addEventListener('scroll', panBackground, { passive: true });
+        window.addEventListener('resize', panBackground);
+    })();
+    </script>
+</body>
+</html>

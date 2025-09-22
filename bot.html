@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giga Chad Bot - Transform Your Photo</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 16 16%22><text y=%2214%22 font-size=%2216%22>💪</text></svg>">
+    <style>
+        body {
+            background-image: url('./wp13049510.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            font-family: 'Impact', 'Arial Black', 'Helvetica', sans-serif;
+            font-weight: 900;
+            letter-spacing: 1px;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            position: relative;
+        }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            z-index: -1;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+        }
+        
+        .header h1 {
+            font-size: 3rem;
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+        
+        .header p {
+            font-size: 1.2rem;
+            margin: 10px 0;
+        }
+        
+        .upload-section {
+            background: rgba(0, 0, 0, 0.7);
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            color: white;
+        }
+        
+        .upload-section h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+            text-transform: uppercase;
+        }
+        
+        .file-input-wrapper {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        
+        .file-input {
+            position: absolute;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+        
+        .file-input-label {
+            display: block;
+            padding: 15px;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 900;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+        }
+        
+        .file-input-label:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .style-selection {
+            margin-bottom: 20px;
+        }
+        
+        .style-selection h3 {
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+            text-transform: uppercase;
+        }
+        
+        .style-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        
+        .style-option {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        
+        .style-option:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.02);
+        }
+        
+        .style-option.selected {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            border-color: white;
+        }
+        
+        .style-option input {
+            display: none;
+        }
+        
+        .style-option label {
+            cursor: pointer;
+            font-weight: 900;
+            text-transform: uppercase;
+        }
+        
+        .generate-btn {
+            width: 100%;
+            padding: 20px;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            border: none;
+            border-radius: 15px;
+            color: white;
+            font-size: 1.3rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            letter-spacing: 2px;
+        }
+        
+        .generate-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+        
+        .generate-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .result-section {
+            background: rgba(0, 0, 0, 0.7);
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 30px;
+            text-align: center;
+            color: white;
+        }
+        
+        .result-section h2 {
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+            text-transform: uppercase;
+        }
+        
+        .result-image {
+            max-width: 100%;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .loading.show {
+            display: block;
+        }
+        
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid #ff6b6b;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .error {
+            background: rgba(255, 0, 0, 0.2);
+            border: 2px solid #ff0000;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+            color: #ff6b6b;
+            font-weight: 900;
+            text-transform: uppercase;
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: white;
+            text-decoration: none;
+            font-weight: 900;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+        }
+        
+        .back-link:hover {
+            color: #4ecdc4;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Giga Chad Bot</h1>
+            <p>Transform any photo into a Gigachad masterpiece</p>
+        </div>
+        
+        <a href="/" class="back-link">← Back to Quotes</a>
+        
+        <div class="upload-section">
+            <h2>Upload Your Photo</h2>
+            <form id="transformForm" enctype="multipart/form-data">
+                <div class="file-input-wrapper">
+                    <input type="file" id="imageInput" name="image" class="file-input" accept="image/*" required>
+                    <label for="imageInput" class="file-input-label">
+                        Choose Image File
+                    </label>
+                </div>
+                
+                <div class="style-selection">
+                    <h3>Select Style</h3>
+                    <div class="style-options">
+                        <div class="style-option selected">
+                            <input type="radio" id="style1" name="style" value="Transform this character into a 'Gigachad' meme. Blend exaggerated Gigachad body and jawline with the original character's features. Wide, angular jaw but warped with the character's essence, bulging cheekbones, exaggerated eyebrow arch. Three-quarter angle, grayscale contrast, with Gigachad-style meme expression. Sculpted physique but absurd character grin dominating the face. Meme parody aesthetic, humorous and surreal. Background plain or dark gradient for focus.">
+                            <label for="style1">OG Gigachad 💪</label>
+                        </div>
+                        <div class="style-option">
+                            <input type="radio" id="style2" name="style" value="Transform this character into a 'Mog Chad' meme. Blend exaggerated Gigachad body and jawline with the original character's features. Wide, angular jaw but warped with the character's essence, bulging cheekbones, exaggerated eyebrow arch. Three-quarter angle, grayscale contrast, with Mog-style meme expression. Sculpted physique but absurd character grin dominating the face. Meme parody aesthetic, humorous and surreal. Background plain or dark gradient for focus.">
+                            <label for="style2">Mog Chad 🔥</label>
+                        </div>
+                        <div class="style-option">
+                            <input type="radio" id="style3" name="style" value="Transform this character into a 'Cartoon Gigachad' meme. Blend exaggerated Gigachad body and jawline with the original character's features. Wide, angular jaw but warped with the character's essence, bulging cheekbones, exaggerated eyebrow arch. Three-quarter angle, grayscale contrast, with cartoon-style meme expression. Sculpted physique but absurd character grin dominating the face. Meme parody aesthetic, humorous and surreal. Background plain or dark gradient for focus.">
+                            <label for="style3">Cartoon Gigachad 🎨</label>
+                        </div>
+                        <div class="style-option">
+                            <input type="radio" id="style4" name="style" value="Transform this character into a 'Troll Gigachad' meme. Blend exaggerated Gigachad body and jawline with the trollface smirk. Wide, angular jaw but warped with mischievous grin, bulging cheekbones, exaggerated eyebrow arch. Three-quarter angle, grayscale contrast, with troll-style meme expression. Sculpted physique but absurd troll grin dominating the face. Meme parody aesthetic, humorous and surreal. Background plain or dark gradient for focus.">
+                            <label for="style4">Troll Gigachad 😈</label>
+                        </div>
+                        <div class="style-option">
+                            <input type="radio" id="style5" name="style" value="Transform this character into a 'Brainrot Gigachad' meme. Blend exaggerated Gigachad body and jawline with chaotic neon energy. Wide, angular jaw but warped with chaotic grin, bulging cheekbones, exaggerated eyebrow arch. Three-quarter angle, high contrast with neon colors, with brainrot-style meme expression. Sculpted physique but absurd chaotic grin dominating the face. Meme parody aesthetic, humorous and surreal. Background chaotic neon gradient for focus.">
+                            <label for="style5">Brainrot Gigachad 🧠</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <button type="submit" id="generateBtn" class="generate-btn">Transform My Photo!</button>
+            </form>
+        </div>
+        
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>Generating your Gigachad masterpiece...</p>
+        </div>
+        
+        <div class="result-section" id="resultSection" style="display: none;">
+            <h2>Your Gigachad Transformation</h2>
+            <img id="resultImage" class="result-image" alt="Generated Gigachad">
+        </div>
+    </div>
+
+    <script>
+        // Style selection handling
+        document.querySelectorAll('.style-option').forEach(option => {
+            option.addEventListener('click', function() {
+                // Remove selected class from all options
+                document.querySelectorAll('.style-option').forEach(opt => opt.classList.remove('selected'));
+                // Add selected class to clicked option
+                this.classList.add('selected');
+                // Check the radio button
+                this.querySelector('input').checked = true;
+            });
+        });
+
+        // Ensure a default is always set
+        const defaultStyleRadio = document.getElementById('style1');
+        if (defaultStyleRadio) defaultStyleRadio.checked = true;
+
+        // Form submission handling
+        document.getElementById('transformForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const generateBtn = document.getElementById('generateBtn');
+            const loading = document.getElementById('loading');
+            const resultSection = document.getElementById('resultSection');
+
+            // Show loading
+            generateBtn.disabled = true;
+            generateBtn.textContent = 'Generating...';
+            loading.classList.add('show');
+            resultSection.style.display = 'none';
+
+            try {
+                const response = await fetch('/transform', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    // Display result
+                    document.getElementById('resultImage').src = `/result/${result.resultId}`;
+                    resultSection.style.display = 'block';
+                } else {
+                    throw new Error(result.error || 'Transform failed');
+                }
+
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Failed to generate image. Please try again.');
+            } finally {
+                // Hide loading
+                generateBtn.disabled = false;
+                generateBtn.textContent = 'Transform My Photo!';
+                loading.classList.remove('show');
+            }
+        });
+    </script>
+</body>
+</html>
