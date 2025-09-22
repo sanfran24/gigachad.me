@@ -84,47 +84,36 @@ app.post('/transform', upload.single('image'), async (req, res) => {
       size: req.file.size 
     });
 
-    // Read the uploaded image
-    const imageBuffer = fs.readFileSync(req.file.path);
+    // Use DALL-E 3 generations instead of edits (simpler, more reliable)
+    console.log('Calling OpenAI DALL-E 3 generations endpoint...');
     
-    // Create form data for OpenAI
-    const FormData = require('form-data');
-    const openaiFormData = new FormData();
-    openaiFormData.append('image', imageBuffer, {
-      filename: req.file.filename,
-      contentType: req.file.mimetype
-    });
-    
-    // Create a simple white mask (1x1 white pixel)
-    const whitePixelBase64 = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==';
-    const maskBuffer = Buffer.from(whitePixelBase64, 'base64');
-    openaiFormData.append('mask', maskBuffer, {
-      filename: 'mask.png',
-      contentType: 'image/png'
-    });
-    
-    openaiFormData.append('prompt', style);
-    openaiFormData.append('size', '1024x1024');
-    openaiFormData.append('n', '1');
-
-    console.log('Calling OpenAI images/edits endpoint...');
-    
-    // Call OpenAI images/edits endpoint
-    const response = await axios.post('https://api.openai.com/v1/images/edits', openaiFormData, {
+    const response = await axios.post('https://api.openai.com/v1/images/generations', {
+      model: 'dall-e-3',
+      prompt: style,
+      n: 1,
+      size: '1024x1024',
+      quality: 'standard'
+    }, {
       headers: {
         'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
-        ...openaiFormData.getHeaders()
+        'Content-Type': 'application/json'
       }
     });
 
     console.log('OpenAI response received:', !!response.data);
 
     const resp = response.data;
-    const b64 = resp?.data?.[0]?.b64_json;
+    const url = resp?.data?.[0]?.url;
 
-    if (!b64) {
+    if (!url) {
       return res.status(500).json({ error: 'No image data from OpenAI' });
     }
+
+    console.log('Downloading image from URL...');
+    // Download image from URL
+    const imageResponse = await fetch(url);
+    const imageBuffer = await imageResponse.arrayBuffer();
+    const b64 = Buffer.from(imageBuffer).toString('base64');
 
     // Save the result
     const resultId = Date.now() + '-' + Math.round(Math.random() * 1E9);
