@@ -41,30 +41,34 @@ export async function POST(request: NextRequest) {
 
     console.log('Calling OpenAI images/edits endpoint...')
     
-    // Call OpenAI images/edits endpoint directly like the original template
-    const response = await axios.post('https://api.openai.com/v1/images/edits', openaiFormData, {
+    // Call OpenAI images/generations endpoint instead of edits
+    const response = await axios.post('https://api.openai.com/v1/images/generations', {
+      model: 'dall-e-3',
+      prompt: prompt,
+      n: 1,
+      size: '1024x1024',
+      quality: 'standard'
+    }, {
       headers: {
-        ...openaiFormData.getHeaders(),
-        'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`
+        'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
+        'Content-Type': 'application/json'
       }
     })
 
     console.log('OpenAI response received:', !!response.data)
 
     const resp = response.data
-    let b64 = resp?.data?.[0]?.b64_json
     const url = resp?.data?.[0]?.url
 
-    if (!b64 && url) {
-      console.log('Downloading image from URL...')
-      // Fallback: download URL to buffer
-      const arr = await (await fetch(url)).arrayBuffer()
-      b64 = Buffer.from(arr).toString('base64')
+    if (!url) {
+      return NextResponse.json({ error: 'No image data from OpenAI' }, { status: 500, headers })
     }
 
-    if (!b64) {
-      return NextResponse.json({ error: 'No image data from OpenAI' }, { status: 500 })
-    }
+    console.log('Downloading image from URL...')
+    // Download image from URL
+    const imageResponse = await fetch(url)
+    const imageBuffer = await imageResponse.arrayBuffer()
+    const b64 = Buffer.from(imageBuffer).toString('base64')
 
     console.log('Returning image, base64 length:', b64.length)
     // Return the generated image
