@@ -3,15 +3,15 @@ import FormData from 'form-data'
 import axios from 'axios'
 
 export async function POST(request: NextRequest) {
+  // Handle CORS - moved outside try block
+  const headers = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type',
+  }
+  
   try {
     console.log('API called - starting generation...')
-    
-    // Handle CORS
-    const headers = {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'POST, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type',
-    }
     
     const formData = await request.formData()
     const image = formData.get('image') as File
@@ -82,7 +82,13 @@ export async function POST(request: NextRequest) {
 
   } catch (error) {
     console.error('Generation error:', error)
-    return NextResponse.json({ error: 'Internal server error', details: error instanceof Error ? error.message : 'Unknown error' }, { status: 500, headers })
+    return NextResponse.json({ 
+      error: 'Internal server error', 
+      details: error instanceof Error ? error.message : 'Unknown error' 
+    }, { 
+      status: 500, 
+      headers 
+    })
   }
 }
 
