@@ -104,15 +104,9 @@ app.post('/transform', upload.single('image'), async (req, res) => {
       .png()
       .toBuffer();
 
-    // Create a proper mask - white areas get edited (like original sleaze bot)
-    const maskBuffer = await sharp({
-      create: {
-        width: 1024,
-        height: 1024,
-        channels: 4,
-        background: { r: 255, g: 255, b: 255, alpha: 1 }
-      }
-    }).png().toBuffer();
+    // Use static mask file (like original sleaze bot)
+    const maskPath = path.join(__dirname, 'public', 'mask.png');
+    const maskBuffer = fs.readFileSync(maskPath);
 
     let b64;
     try {
