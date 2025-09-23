@@ -16,8 +16,8 @@ const PORT = process.env.PORT || 3000;
 
 // Concurrency and performance optimizations
 const MAX_CONCURRENT_REQUESTS = 20;
-const REQUEST_TIMEOUT = 120000; // 2 minutes for user requests
-const OPENAI_TIMEOUT = 90000; // 90 seconds for OpenAI API
+const REQUEST_TIMEOUT = 300000; // 5 minutes for user requests
+const OPENAI_TIMEOUT = 240000; // 4 minutes for OpenAI API
 const CLEANUP_INTERVAL = 30000; // Clean up every 30 seconds
 
 // Request queue to handle concurrency
@@ -99,7 +99,7 @@ app.use('/transform', (req, res, next) => {
       success: false, 
       error: 'Server is at capacity (20 users). Please try again in a moment.',
       queuePosition: requestQueue.length + 1,
-      estimatedWaitTime: Math.ceil((requestQueue.length + 1) * 2) // 2 minutes per request estimate
+      estimatedWaitTime: Math.ceil((requestQueue.length + 1) * 3) // 3 minutes per request estimate
     });
   }
   
@@ -114,7 +114,7 @@ app.use('/transform', (req, res, next) => {
     if (!res.headersSent) {
       res.status(408).json({ 
         success: false, 
-        error: 'Request timeout - image processing took too long. Please try again.',
+        error: 'Request timeout - image processing took longer than 5 minutes. Please try again.',
         timeout: true
       });
     }
