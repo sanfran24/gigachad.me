@@ -333,7 +333,13 @@ app.post('/transform', upload.single('image'), async (req, res) => {
     
     const imageId = `${Date.now()}-${Math.random().toString(36).slice(2)}.png`;
     const outPath = path.join(__dirname, 'results', imageId);
+    
+    console.log(`[${req.requestId}] Saving image with ID: ${imageId}`);
+    console.log(`[${req.requestId}] Full path: ${outPath}`);
+    
     await fs.promises.writeFile(outPath, Buffer.from(b64, 'base64'));
+    
+    console.log(`[${req.requestId}] Image saved successfully. File exists: ${fs.existsSync(outPath)}`);
 
     // Clean up uploaded file
     fs.unlinkSync(req.file.path);
@@ -356,10 +362,16 @@ app.get('/result/:imageId', (req, res) => {
   const { imageId } = req.params;
   const resultPath = path.join(__dirname, 'results', imageId);
   
+  console.log(`[RESULT] Requesting image: ${imageId}`);
+  console.log(`[RESULT] Full path: ${resultPath}`);
+  console.log(`[RESULT] File exists: ${fs.existsSync(resultPath)}`);
+  
   if (fs.existsSync(resultPath)) {
+    console.log(`[RESULT] Serving image: ${imageId}`);
     res.sendFile(resultPath);
   } else {
-    res.status(404).json({ error: 'Result not found' });
+    console.log(`[RESULT] Image not found: ${imageId}`);
+    res.status(404).json({ error: 'Result not found', imageId: imageId });
   }
 });
 
