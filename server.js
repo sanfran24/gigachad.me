@@ -97,21 +97,34 @@ app.post('/transform', upload.single('image'), async (req, res) => {
       return res.status(400).json({ success: false, error: 'Unknown style' });
     }
 
-    // Try images/edits without mask first (some versions don't use mask)
-    console.log('Trying images/edits without mask...');
-    
+    // True img2img: convert upload to PNG RGBA and send to images/edits (exactly like original sleaze bot)
+    const pngBuffer = await sharp(req.file.path)
+      .resize(1024, 1024, { fit: 'cover' })
+      .ensureAlpha()
+      .png()
+      .toBuffer();
+
+    // Write temp file for SDK stream with proper extension
+    if (!fs.existsSync('tmp')) {
+      fs.mkdirSync('tmp');
+    }
+    const tmpPng = path.join(__dirname, 'tmp', `${Date.now()}-${Math.random().toString(36).slice(2)}.png`);
+    await fs.promises.writeFile(tmpPng, pngBuffer);
+
     let b64;
     try {
+      // Use form-data with proper file handling (exactly like original sleaze bot)
       const formData = new FormData();
-      formData.append('image', fs.createReadStream(req.file.path), {
+      formData.append('image', pngBuffer, {
         filename: 'image.png',
         contentType: 'image/png'
       });
       formData.append('prompt', prompt);
       formData.append('size', '1024x1024');
       formData.append('n', '1');
+      formData.append('model', 'gpt-image-1');
       
-      console.log('Calling OpenAI images/edits endpoint without mask...');
+      console.log('Calling OpenAI images/edits endpoint...');
       
       const response = await axios.post('https://api.openai.com/v1/images/edits', formData, {
         headers: {
@@ -131,6 +144,8 @@ app.post('/transform', upload.single('image'), async (req, res) => {
     } catch (err) {
       console.error('OpenAI edit error:', err.response?.status, err.response?.data || err.message);
       return res.status(500).json({ success: false, error: err.response?.data || err.message });
+    } finally {
+      fs.unlink(tmpPng, () => {});
     }
 
     if (!b64) {
