@@ -16,12 +16,51 @@ const PORT = process.env.PORT || 3000;
 
 // Concurrency and performance optimizations
 const MAX_CONCURRENT_REQUESTS = 20;
-const REQUEST_TIMEOUT = 60000; // 60 seconds
-const OPENAI_TIMEOUT = 45000; // 45 seconds
+const REQUEST_TIMEOUT = 120000; // 2 minutes for user requests
+const OPENAI_TIMEOUT = 90000; // 90 seconds for OpenAI API
+const CLEANUP_INTERVAL = 30000; // Clean up every 30 seconds
 
 // Request queue to handle concurrency
 let activeRequests = 0;
 const requestQueue = [];
+const activeRequestTimers = new Map(); // Track request timeouts
+
+// Cleanup system
+setInterval(() => {
+  // Clean up old temp files
+  const tmpDir = path.join(__dirname, 'tmp');
+  if (fs.existsSync(tmpDir)) {
+    fs.readdir(tmpDir, (err, files) => {
+      if (!err) {
+        files.forEach(file => {
+          const filePath = path.join(tmpDir, file);
+          fs.stat(filePath, (err, stats) => {
+            if (!err && Date.now() - stats.mtime.getTime() > 300000) { // 5 minutes old
+              fs.unlink(filePath, () => {});
+            }
+          });
+        });
+      }
+    });
+  }
+  
+  // Clean up old results
+  const resultsDir = path.join(__dirname, 'results');
+  if (fs.existsSync(resultsDir)) {
+    fs.readdir(resultsDir, (err, files) => {
+      if (!err) {
+        files.forEach(file => {
+          const filePath = path.join(resultsDir, file);
+          fs.stat(filePath, (err, stats) => {
+            if (!err && Date.now() - stats.mtime.getTime() > 3600000) { // 1 hour old
+              fs.unlink(filePath, () => {});
+            }
+          });
+        });
+      }
+    });
+  }
+}, CLEANUP_INTERVAL);
 
 // CORS middleware
 app.use((req, res, next) => {
@@ -53,33 +92,51 @@ app.use(express.static('public', {
 
 // Concurrency management middleware
 app.use('/transform', (req, res, next) => {
+  const requestId = `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+  
   if (activeRequests >= MAX_CONCURRENT_REQUESTS) {
     return res.status(503).json({ 
       success: false, 
-      error: 'Server busy, please try again in a moment',
-      queuePosition: requestQueue.length + 1
+      error: 'Server is at capacity (20 users). Please try again in a moment.',
+      queuePosition: requestQueue.length + 1,
+      estimatedWaitTime: Math.ceil((requestQueue.length + 1) * 2) // 2 minutes per request estimate
     });
   }
   
   activeRequests++;
-  console.log(`Active requests: ${activeRequests}/${MAX_CONCURRENT_REQUESTS}`);
+  console.log(`[${requestId}] Request started. Active: ${activeRequests}/${MAX_CONCURRENT_REQUESTS}`);
   
-  // Set request timeout
-  req.setTimeout(REQUEST_TIMEOUT, () => {
+  // Set request timeout with cleanup
+  const timeoutId = setTimeout(() => {
     activeRequests--;
+    activeRequestTimers.delete(requestId);
+    console.log(`[${requestId}] Request timeout after ${REQUEST_TIMEOUT}ms`);
     if (!res.headersSent) {
-      res.status(408).json({ success: false, error: 'Request timeout' });
+      res.status(408).json({ 
+        success: false, 
+        error: 'Request timeout - image processing took too long. Please try again.',
+        timeout: true
+      });
     }
-  });
+  }, REQUEST_TIMEOUT);
+  
+  activeRequestTimers.set(requestId, timeoutId);
   
   // Clean up on response
   const originalEnd = res.end;
   res.end = function(...args) {
     activeRequests--;
-    console.log(`Request completed. Active requests: ${activeRequests}/${MAX_CONCURRENT_REQUESTS}`);
+    const timer = activeRequestTimers.get(requestId);
+    if (timer) {
+      clearTimeout(timer);
+      activeRequestTimers.delete(requestId);
+    }
+    console.log(`[${requestId}] Request completed. Active: ${activeRequests}/${MAX_CONCURRENT_REQUESTS}`);
     originalEnd.apply(this, args);
   };
   
+  // Add request ID to request object for logging
+  req.requestId = requestId;
   next();
 });
 
@@ -144,6 +201,26 @@ app.get('/status', (req, res) => {
   });
 });
 
+// Progress endpoint for users to check their request status
+app.get('/progress/:requestId', (req, res) => {
+  const { requestId } = req.params;
+  
+  if (activeRequestTimers.has(requestId)) {
+    res.json({
+      status: 'processing',
+      message: 'Your image is being transformed...',
+      activeRequests: activeRequests,
+      maxConcurrent: MAX_CONCURRENT_REQUESTS
+    });
+  } else {
+    res.json({
+      status: 'not_found',
+      message: 'Request not found or completed',
+      activeRequests: activeRequests
+    });
+  }
+});
+
 // Style to prompt mapping (like original sleaze bot)
 const styleToPrompt = {
   'og-gigachad': 'Transform this character into a Gigachad meme. Blend exaggerated Gigachad body and jawline with the original character\'s features. Wide, angular jaw but warped with the character\'s essence, bulging cheekbones, exaggerated eyebrow arch. Three-quarter angle, grayscale contrast, with Gigachad-style meme expression. Sculpted physique but absurd character grin dominating the face. Meme parody aesthetic, humorous and surreal. Background plain or dark gradient for focus.',
@@ -156,11 +233,12 @@ const styleToPrompt = {
 // Transform endpoint (matching original sleaze bot structure)
 app.post('/transform', upload.single('image'), async (req, res) => {
   try {
-    console.log('Transform request:', {
+    console.log(`[${req.requestId}] Transform request:`, {
       hasFile: !!req.file,
       fileMimetype: req.file?.mimetype,
       fileSize: req.file?.size,
-      style: req.body.style
+      style: req.body.style,
+      activeRequests: activeRequests
     });
 
     const style = req.body.style;
@@ -200,7 +278,7 @@ app.post('/transform', upload.single('image'), async (req, res) => {
       formData.append('n', '1');
       formData.append('model', 'gpt-image-1');
       
-      console.log('Calling OpenAI images/edits endpoint...');
+      console.log(`[${req.requestId}] Calling OpenAI images/edits endpoint...`);
       
       const response = await axios.post('https://api.openai.com/v1/images/edits', formData, {
         headers: {
@@ -210,6 +288,8 @@ app.post('/transform', upload.single('image'), async (req, res) => {
         timeout: OPENAI_TIMEOUT,
         maxRedirects: 3
       });
+      
+      console.log(`[${req.requestId}] OpenAI response received successfully`);
       
       const resp = response.data;
       b64 = resp?.data?.[0]?.b64_json;
@@ -258,7 +338,13 @@ app.post('/transform', upload.single('image'), async (req, res) => {
     // Clean up uploaded file
     fs.unlinkSync(req.file.path);
 
-    return res.json({ success: true, image_id: imageId });
+    console.log(`[${req.requestId}] Transform completed successfully. Image ID: ${imageId}`);
+    return res.json({ 
+      success: true, 
+      image_id: imageId,
+      request_id: req.requestId,
+      processing_time: Date.now() - parseInt(req.requestId.split('-')[0])
+    });
   } catch (e) {
     console.error('Transform error:', e);
     return res.status(500).json({ success: false, error: e.message });
