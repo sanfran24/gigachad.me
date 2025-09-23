@@ -25,6 +25,17 @@ let activeRequests = 0;
 const requestQueue = [];
 const activeRequestTimers = new Map(); // Track request timeouts
 
+// Basic CORS for all routes (allow Namecheap and other origins)
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET,POST,OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(204);
+  }
+  next();
+});
+
 // Cleanup system
 setInterval(() => {
   // Clean up old temp files
