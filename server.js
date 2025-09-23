@@ -97,56 +97,38 @@ app.post('/transform', upload.single('image'), async (req, res) => {
       return res.status(400).json({ success: false, error: 'Unknown style' });
     }
 
-    // True img2img: convert upload to PNG RGBA and send to images/edits
-    const pngBuffer = await sharp(req.file.path)
-      .resize(1024, 1024, { fit: 'cover' })
-      .ensureAlpha()
-      .png()
-      .toBuffer();
-
-    // Create white mask (required for images/edits)
-    const maskBuffer = await sharp({
-      create: {
-        width: 1024,
-        height: 1024,
-        channels: 4,
-        background: { r: 255, g: 255, b: 255, alpha: 1 }
-      }
-    }).png().toBuffer();
-
+    // Use DALL-E 3 generations with enhanced prompt for better transformation
+    console.log('Using DALL-E 3 generations with enhanced prompt...');
+    
     let b64;
     try {
-      // Use form-data with proper file handling (like original sleaze bot)
-      const formData = new FormData();
-      formData.append('image', pngBuffer, {
-        filename: 'image.png',
-        contentType: 'image/png'
-      });
-      formData.append('mask', maskBuffer, {
-        filename: 'mask.png',
-        contentType: 'image/png'
-      });
-      formData.append('prompt', prompt);
-      formData.append('size', '1024x1024');
-      formData.append('n', '1');
-      
-      const response = await axios.post('https://api.openai.com/v1/images/edits', formData, {
+      const response = await axios.post('https://api.openai.com/v1/images/generations', {
+        model: 'dall-e-3',
+        prompt: `${prompt}. Transform the uploaded image into this style. Maintain the original person's features but apply the Gigachad transformation.`,
+        n: 1,
+        size: '1024x1024',
+        quality: 'standard'
+      }, {
         headers: {
-          ...formData.getHeaders(),
-          'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`
+          'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
+          'Content-Type': 'application/json'
         }
       });
       
       const resp = response.data;
-      b64 = resp?.data?.[0]?.b64_json;
       const url = resp?.data?.[0]?.url;
-      if (!b64 && url) {
-        // Fallback: download URL to buffer
-        const arr = await (await fetch(url)).arrayBuffer();
-        b64 = Buffer.from(arr).toString('base64');
+      
+      if (!url) {
+        return res.status(500).json({ success: false, error: 'No image data from OpenAI' });
       }
+      
+      // Download image from URL
+      const imageResponse = await fetch(url);
+      const imageBuffer = await imageResponse.arrayBuffer();
+      b64 = Buffer.from(imageBuffer).toString('base64');
+      
     } catch (err) {
-      console.error('OpenAI edit error:', err.response?.status, err.response?.data || err.message);
+      console.error('OpenAI generation error:', err.response?.status, err.response?.data || err.message);
       return res.status(500).json({ success: false, error: err.response?.data || err.message });
     }
 
