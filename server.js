@@ -5,10 +5,23 @@ const fs = require('fs');
 const axios = require('axios');
 const sharp = require('sharp');
 const FormData = require('form-data');
+const cluster = require('cluster');
+const os = require('os');
+const compression = require('compression');
+const helmet = require('helmet');
 require('dotenv').config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+// Concurrency and performance optimizations
+const MAX_CONCURRENT_REQUESTS = 20;
+const REQUEST_TIMEOUT = 60000; // 60 seconds
+const OPENAI_TIMEOUT = 45000; // 45 seconds
+
+// Request queue to handle concurrency
+let activeRequests = 0;
+const requestQueue = [];
 
 // CORS middleware
 app.use((req, res, next) => {
@@ -23,9 +36,52 @@ app.use((req, res, next) => {
   }
 });
 
+// Performance middleware
+app.use(helmet({
+  contentSecurityPolicy: false, // Disable CSP for development
+  crossOriginEmbedderPolicy: false
+}));
+app.use(compression());
+
 // Middleware
-app.use(express.json());
-app.use(express.static('public'));
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ limit: '10mb', extended: true }));
+app.use(express.static('public', {
+  maxAge: '1d', // Cache static files for 1 day
+  etag: true
+}));
+
+// Concurrency management middleware
+app.use('/transform', (req, res, next) => {
+  if (activeRequests >= MAX_CONCURRENT_REQUESTS) {
+    return res.status(503).json({ 
+      success: false, 
+      error: 'Server busy, please try again in a moment',
+      queuePosition: requestQueue.length + 1
+    });
+  }
+  
+  activeRequests++;
+  console.log(`Active requests: ${activeRequests}/${MAX_CONCURRENT_REQUESTS}`);
+  
+  // Set request timeout
+  req.setTimeout(REQUEST_TIMEOUT, () => {
+    activeRequests--;
+    if (!res.headersSent) {
+      res.status(408).json({ success: false, error: 'Request timeout' });
+    }
+  });
+  
+  // Clean up on response
+  const originalEnd = res.end;
+  res.end = function(...args) {
+    activeRequests--;
+    console.log(`Request completed. Active requests: ${activeRequests}/${MAX_CONCURRENT_REQUESTS}`);
+    originalEnd.apply(this, args);
+  };
+  
+  next();
+});
 
 // Configure multer for file uploads
 const storage = multer.diskStorage({
@@ -65,7 +121,27 @@ app.get('/bot', (req, res) => {
 
 // Health check
 app.get('/health', (req, res) => {
-  res.json({ status: 'OK', timestamp: new Date().toISOString() });
+  res.json({ 
+    status: 'OK', 
+    timestamp: new Date().toISOString(),
+    activeRequests: activeRequests,
+    maxConcurrent: MAX_CONCURRENT_REQUESTS,
+    queueLength: requestQueue.length
+  });
+});
+
+// Status endpoint for monitoring
+app.get('/status', (req, res) => {
+  res.json({
+    server: 'Gigachad Bot',
+    status: 'running',
+    activeRequests: activeRequests,
+    maxConcurrent: MAX_CONCURRENT_REQUESTS,
+    queueLength: requestQueue.length,
+    uptime: process.uptime(),
+    memory: process.memoryUsage(),
+    timestamp: new Date().toISOString()
+  });
 });
 
 // Style to prompt mapping (like original sleaze bot)
@@ -130,7 +206,9 @@ app.post('/transform', upload.single('image'), async (req, res) => {
         headers: {
           ...formData.getHeaders(),
           'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`
-        }
+        },
+        timeout: OPENAI_TIMEOUT,
+        maxRedirects: 3
       });
       
       const resp = response.data;
@@ -143,9 +221,25 @@ app.post('/transform', upload.single('image'), async (req, res) => {
       }
     } catch (err) {
       console.error('OpenAI edit error:', err.response?.status, err.response?.data || err.message);
-      return res.status(500).json({ success: false, error: err.response?.data || err.message });
+      
+      // Clean up temp file on error
+      if (fs.existsSync(tmpPng)) {
+        fs.unlink(tmpPng, () => {});
+      }
+      
+      // Return appropriate error based on type
+      if (err.code === 'ECONNABORTED' || err.message.includes('timeout')) {
+        return res.status(408).json({ success: false, error: 'Request timeout - please try again' });
+      } else if (err.response?.status === 429) {
+        return res.status(429).json({ success: false, error: 'Rate limit exceeded - please wait a moment' });
+      } else {
+        return res.status(500).json({ success: false, error: err.response?.data || err.message });
+      }
     } finally {
-      fs.unlink(tmpPng, () => {});
+      // Clean up temp file
+      if (fs.existsSync(tmpPng)) {
+        fs.unlink(tmpPng, () => {});
+      }
     }
 
     if (!b64) {
