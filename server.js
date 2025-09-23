@@ -89,7 +89,8 @@ app.use((req, res, next) => {
 // Performance middleware
 app.use(helmet({
   contentSecurityPolicy: false, // Disable CSP for development
-  crossOriginEmbedderPolicy: false
+  crossOriginEmbedderPolicy: false,
+  crossOriginResourcePolicy: { policy: 'cross-origin' } // allow images to be embedded from other origins
 }));
 app.use(compression());
 
@@ -373,6 +374,11 @@ app.get('/result/:imageId', (req, res) => {
   const { imageId } = req.params;
   const resultPath = path.join(__dirname, 'results', imageId);
   
+  // Allow embedding image from other origins
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Cross-Origin-Resource-Policy', 'cross-origin');
+  res.header('Cross-Origin-Embedder-Policy', 'unsafe-none');
+
   console.log(`[RESULT] Requesting image: ${imageId}`);
   console.log(`[RESULT] Full path: ${resultPath}`);
   console.log(`[RESULT] File exists: ${fs.existsSync(resultPath)}`);
