@@ -359,6 +359,22 @@
             });
         });
 
+        // Use uploaded image as page background immediately
+        (function attachUploadBackgroundPreview() {
+            const input = document.getElementById('imageInput');
+            if (!input) return;
+            input.addEventListener('change', function() {
+                const file = this.files && this.files[0];
+                if (!file) return;
+                const url = URL.createObjectURL(file);
+                // Revoke previous preview URL to avoid leaks
+                const prev = document.body.dataset.bgUrl;
+                if (prev) try { URL.revokeObjectURL(prev); } catch (e) {}
+                document.body.style.backgroundImage = `url('${url}')`;
+                document.body.dataset.bgUrl = url;
+            });
+        })();
+
         // Ensure a default is always set
         const defaultStyleRadio = document.getElementById('style1');
         if (defaultStyleRadio) defaultStyleRadio.checked = true;
