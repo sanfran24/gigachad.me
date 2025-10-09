@@ -202,7 +202,7 @@ app.get('/health', (req, res) => {
 // Status endpoint for monitoring
 app.get('/status', (req, res) => {
   res.json({
-    server: 'Gigachad Bot',
+    server: 'BNB Wojackk Bot',
     status: 'running',
     activeRequests: activeRequests,
     maxConcurrent: MAX_CONCURRENT_REQUESTS,
@@ -233,14 +233,9 @@ app.get('/progress/:requestId', (req, res) => {
   }
 });
 
-// Style to prompt mapping (like original sleaze bot)
+// Style to prompt mapping (Single Super Saiyan style)
 const styleToPrompt = {
-  'og-gigachad': 'Transform this character into a Gigachad meme. Blend exaggerated Gigachad body and jawline with the original character\'s features. Wide, angular jaw but warped with the character\'s essence, bulging cheekbones, exaggerated eyebrow arch. Three-quarter angle, grayscale contrast, with Gigachad-style meme expression. Sculpted physique but absurd character grin dominating the face. Meme parody aesthetic, humorous and surreal. Background plain or dark gradient for focus.',
-  'mog-chad': 'Transform this character into a Mog Chad meme. Blend exaggerated Gigachad body and jawline with the original character\'s features. Wide, angular jaw but warped with the character\'s essence, bulging cheekbones, exaggerated eyebrow arch. Three-quarter angle, grayscale contrast, with Mog-style meme expression. Add iconic Pit Viper sunglasses — bold wraparound frames — with iridescent rainbow, oil-slick gradient mirrored lenses (prismatic magenta→purple→blue→cyan→green highlights), highly reflective mirror finish catching light. Ensure the Pit Viper shades stay on the face in the final image. Sculpted physique but absurd character grin dominating the face. Meme parody aesthetic, humorous and surreal. Background plain or dark gradient for focus.',
-  'cartoon-gigachad': 'Transform this character into a Cartoon Gigachad meme. Blend exaggerated Gigachad body and jawline with the original character\'s features. Wide, angular jaw but warped with the character\'s essence, bulging cheekbones, exaggerated eyebrow arch. Three-quarter angle, grayscale contrast, with cartoon-style meme expression. Sculpted physique but absurd character grin dominating the face. Meme parody aesthetic, humorous and surreal. Background plain or dark gradient for focus.',
-  'troll-gigachad': 'Transform this character into a Troll Gigachad meme. Blend exaggerated Gigachad body and jawline with the trollface smirk. Wide, angular jaw but warped with mischievous grin, bulging cheekbones, exaggerated eyebrow arch. Three-quarter angle, grayscale contrast, with troll-style meme expression. Sculpted physique but absurd troll grin dominating the face. Meme parody aesthetic, humorous and surreal. Background plain or dark gradient for focus.',
-  'brainrot-gigachad': 'Transform this character into a Brainrot Gigachad meme. Blend exaggerated Gigachad body and jawline with chaotic neon energy. Wide, angular jaw but warped with chaotic grin, bulging cheekbones, exaggerated eyebrow arch. Three-quarter angle, high contrast with neon colors, with brainrot-style meme expression. Sculpted physique but absurd chaotic grin dominating the face. Meme parody aesthetic, humorous and surreal. Background chaotic neon gradient for focus.',
-  'binance-gigachad': 'Transform this character into a Binance Gigachad meme. Keep the person\'s identity and features; do not change ethnicity. Subject wears a matte-black hoodie with an embroidered Binance logo on the chest (gold #F3BA2F). Add a small Binance (four rotated squares) gold symbol centered on the forehead. Preserve key facial features and proportions from the input (eye shape, nose, mouth, facial geometry) and retain original skin tone, hair color, and a hint of the original color grading while applying Binance gold accents. Wide, angular Gigachad jawline, bulging cheekbones, exaggerated eyebrow arch. Three-quarter angle, grayscale/low-saturation contrast, meme-style expression. Sculpted physique with chiseled jaw dominating the face. Meme parody aesthetic, humorous and surreal. Background plain or dark gradient for focus.'
+  'saiyan-bnb': "Apply this to the [character]: high-energy Super Saiyan transformation with vivid anime style and crisp linework. Subject is centered, three-quarter angle, powerful yet composed expression. Identity retention: keep the person’s identity and features; do not change ethnicity. Preserve facial geometry and landmarks (eye shape, nose, mouth, jawline, cheekbones), skin tone, and overall hairstyle/hairline. Allow gravity-defying spiky hair styling with a golden highlight while keeping the hairline/shape recognizable; do not obscure the face. Keep the original pose and clothing (enhance with subtle folds/lighting only). Surround the subject with a bright golden aura, soft bloom, and subtle lightning arcs; add upward motion lines and a faint upward stock chart in the background for momentum. Use Binance yellow #F0B90B for aura/lightning accents; avoid covering the face with effects. Background softly defocused; emphasize depth and dynamic lighting; 1024x1024 composition. No face replacement, no age/gender changes, no heavy filters that blur facial details."
 };
 
 // Transform endpoint (matching original sleaze bot structure)
@@ -255,13 +250,22 @@ app.post('/transform', upload.single('image'), async (req, res) => {
     });
 
     const style = req.body.style;
-    if (!req.file || !style) {
-      return res.status(400).json({ success: false, error: 'Missing image or style' });
+    if (!req.file || (!style && !req.body.prompt)) {
+      return res.status(400).json({ success: false, error: 'Missing image or style/prompt' });
     }
-    
-    const prompt = styleToPrompt[style];
+
+    // Fallback: if style is not a known key, treat it as a raw prompt or use req.body.prompt
+    let prompt = style ? styleToPrompt[style] : undefined;
     if (!prompt) {
-      return res.status(400).json({ success: false, error: 'Unknown style' });
+      if (typeof style === 'string' && style.trim().length > 0 && !styleToPrompt[style]) {
+        // Allow raw prompt passed in the style field
+        prompt = style;
+      } else if (typeof req.body.prompt === 'string' && req.body.prompt.trim().length > 0) {
+        prompt = req.body.prompt;
+      }
+    }
+    if (!prompt) {
+      return res.status(400).json({ success: false, error: 'Unknown style or empty prompt' });
     }
 
     // True img2img: convert upload to PNG RGBA and send to images/edits (exactly like original sleaze bot)
@@ -400,6 +404,6 @@ app.use((error, req, res, next) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`🚀 Gigachad Bot server running on port ${PORT}`);
-  console.log(`💪 Ready to transform images into Gigachad masterpieces!`);
+  console.log(`🚀 BNB Wojackk Bot server running on port ${PORT}`);
+  console.log(`💪 Ready to transform images into BNB Wojackk masterpieces!`);
 });

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Giga Chad Bot - Transform Your Photo</title>
+    <title>BNB Wojackk Bot - Transform Your Photo</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 16 16%22><text y=%2214%22 font-size=%2216%22>💪</text></svg>">
     <style>
         body {
@@ -92,7 +92,7 @@
         .file-input-label {
             display: block;
             padding: 15px;
-            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            background: linear-gradient(45deg, #F0B90B, #ffd65e);
             border: none;
             border-radius: 10px;
             color: white;
@@ -141,7 +141,7 @@
         }
         
         .style-option.selected {
-            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            background: linear-gradient(45deg, #F0B90B, #ffd65e);
             border-color: white;
         }
         
@@ -158,7 +158,7 @@
         .generate-btn {
             width: 100%;
             padding: 20px;
-            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            background: linear-gradient(45deg, #F0B90B, #ffd65e);
             border: none;
             border-radius: 15px;
             color: white;
@@ -258,8 +258,8 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>Giga Chad Bot</h1>
-            <p>Transform any photo into a Gigachad masterpiece</p>
+            <h1>Super Saiyan Bot</h1>
+            <p>Turn any photo into a golden Super Saiyan vibe</p>
         </div>
         
         <a href="/" class="back-link">← Back to Quotes</a>
@@ -275,27 +275,11 @@
                 </div>
                 
                 <div class="style-selection">
-                    <h3>Select Style</h3>
+                    <h3>Style</h3>
                     <div class="style-options">
                         <div class="style-option selected">
-                            <input type="radio" id="style1" name="style" value="Transform this character into a 'Gigachad' meme. Blend exaggerated Gigachad body and jawline with the original character's features. Wide, angular jaw but warped with the character's essence, bulging cheekbones, exaggerated eyebrow arch. Three-quarter angle, grayscale contrast, with Gigachad-style meme expression. Sculpted physique but absurd character grin dominating the face. Meme parody aesthetic, humorous and surreal. Background plain or dark gradient for focus.">
-                            <label for="style1">OG Gigachad 💪</label>
-                        </div>
-                        <div class="style-option">
-                            <input type="radio" id="style2" name="style" value="Transform this character into a 'Mog Chad' meme. Blend exaggerated Gigachad body and jawline with the original character's features. Wide, angular jaw but warped with the character's essence, bulging cheekbones, exaggerated eyebrow arch. Three-quarter angle, grayscale contrast, with Mog-style meme expression. Sculpted physique but absurd character grin dominating the face. Meme parody aesthetic, humorous and surreal. Background plain or dark gradient for focus.">
-                            <label for="style2">Mog Chad 🔥</label>
-                        </div>
-                        <div class="style-option">
-                            <input type="radio" id="style3" name="style" value="Transform this character into a 'Cartoon Gigachad' meme. Blend exaggerated Gigachad body and jawline with the original character's features. Wide, angular jaw but warped with the character's essence, bulging cheekbones, exaggerated eyebrow arch. Three-quarter angle, grayscale contrast, with cartoon-style meme expression. Sculpted physique but absurd character grin dominating the face. Meme parody aesthetic, humorous and surreal. Background plain or dark gradient for focus.">
-                            <label for="style3">Cartoon Gigachad 🎨</label>
-                        </div>
-                        <div class="style-option">
-                            <input type="radio" id="style4" name="style" value="Transform this character into a 'Troll Gigachad' meme. Blend exaggerated Gigachad body and jawline with the trollface smirk. Wide, angular jaw but warped with mischievous grin, bulging cheekbones, exaggerated eyebrow arch. Three-quarter angle, grayscale contrast, with troll-style meme expression. Sculpted physique but absurd troll grin dominating the face. Meme parody aesthetic, humorous and surreal. Background plain or dark gradient for focus.">
-                            <label for="style4">Troll Gigachad 😈</label>
-                        </div>
-                        <div class="style-option">
-                            <input type="radio" id="style5" name="style" value="Transform this character into a 'Brainrot Gigachad' meme. Blend exaggerated Gigachad body and jawline with chaotic neon energy. Wide, angular jaw but warped with chaotic grin, bulging cheekbones, exaggerated eyebrow arch. Three-quarter angle, high contrast with neon colors, with brainrot-style meme expression. Sculpted physique but absurd chaotic grin dominating the face. Meme parody aesthetic, humorous and surreal. Background chaotic neon gradient for focus.">
-                            <label for="style5">Brainrot Gigachad 🧠</label>
+                            <input type="radio" id="style1" name="style" value="saiyan-bnb">
+                            <label for="style1">Super Saiyan ⚡</label>
                         </div>
                     </div>
                 </div>
@@ -306,12 +290,12 @@
         
         <div class="loading" id="loading">
             <div class="spinner"></div>
-            <p>Generating your Gigachad masterpiece...</p>
+            <p>Generating your Super Saiyan masterpiece...</p>
         </div>
         
         <div class="result-section" id="resultSection" style="display: none;">
-            <h2>Your Gigachad Transformation</h2>
-            <img id="resultImage" class="result-image" alt="Generated Gigachad">
+            <h2>Your Super Saiyan Transformation</h2>
+            <img id="resultImage" class="result-image" alt="Generated Super Saiyan">
         </div>
     </div>
 
@@ -348,7 +332,7 @@
             resultSection.style.display = 'none';
 
             try {
-                const response = await fetch('https://gigachad-mess.onrender.com/transform', {
+                const response = await fetch('/transform', {
                     method: 'POST',
                     body: formData
                 });
@@ -357,7 +341,7 @@
 
                 if (result.success) {
                     // Display result
-                    document.getElementById('resultImage').src = `https://gigachad-mess.onrender.com/result/${result.resultId}`;
+                    document.getElementById('resultImage').src = `/result/${result.image_id}`;
                     resultSection.style.display = 'block';
                 } else {
                     throw new Error(result.error || 'Transform failed');
