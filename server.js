@@ -236,7 +236,7 @@ app.get('/progress/:requestId', (req, res) => {
 // Style to prompt mapping
 const styleToPrompt = {
   'saiyan-bnb': "Apply this to the [character]: high-energy Super Saiyan transformation with vivid anime style and crisp linework. Subject is centered, three-quarter angle, powerful yet composed expression. Identity retention: keep the person's identity and features; do not change ethnicity. Preserve facial geometry and landmarks (eye shape, nose, mouth, jawline, cheekbones), skin tone, and overall hairstyle/hairline. Allow gravity-defying spiky hair styling with a golden highlight while keeping the hairline/shape recognizable; do not obscure the face. Keep the original pose and clothing (enhance with subtle folds/lighting only). Surround the subject with a bright golden aura, soft bloom, and subtle lightning arcs; add upward motion lines and a faint upward stock chart in the background for momentum. Use Binance yellow #F0B90B for aura/lightning accents; avoid covering the face with effects. Background softly defocused; emphasize depth and dynamic lighting; 1024x1024 composition. No face replacement, no age/gender changes, no heavy filters that blur facial details.",
-  'purple-laser-eyes': "Transform the person's eyes to have bright purple laser beams shooting out horizontally from both eyes. Keep the person's original face, features, and identity completely intact. Only modify the eyes to emit intense purple laser beams that extend beyond the frame edges. The laser beams should be bright purple (#8B5CF6 or similar), glowing, and have a slight glow effect around them. Preserve all facial features, skin tone, hair, and expression. The laser beams should look powerful and intense, similar to the Bitcoin laser eyes meme but in purple. Keep the original background and pose. 1024x1024 composition."
+  'purple-laser-eyes': "Add the attached purple laser eyes on the profile picture I will send you next. Very important to detect the eyes on the PFP precisely and place the purple laser eyes on top of the PFP eyes. DO NOT change the original photo in any way shape or form. Only add bright purple laser beams shooting horizontally from both eyes, exactly positioned over the existing eyes. The laser beams should be bright purple (#8B5CF6), glowing with a slight glow effect. Preserve all facial features, skin tone, hair, expression, and background completely unchanged. 1024x1024 composition."
 };
 
 // Transform endpoint (matching original sleaze bot structure)
@@ -291,6 +291,19 @@ app.post('/transform', upload.single('image'), async (req, res) => {
         filename: 'image.png',
         contentType: 'image/png'
       });
+      
+      // Add reference image for purple laser eyes
+      if (style === 'purple-laser-eyes') {
+        const referenceImagePath = path.join(__dirname, '..', 'example.png');
+        if (fs.existsSync(referenceImagePath)) {
+          const referenceImageBuffer = await fs.promises.readFile(referenceImagePath);
+          formData.append('reference_image', referenceImageBuffer, {
+            filename: 'example.png',
+            contentType: 'image/png'
+          });
+        }
+      }
+      
       formData.append('prompt', prompt);
       formData.append('size', '1024x1024');
       formData.append('n', '1');
