@@ -292,17 +292,7 @@ app.post('/transform', upload.single('image'), async (req, res) => {
         contentType: 'image/png'
       });
       
-      // Add reference image for purple laser eyes
-      if (style === 'purple-laser-eyes') {
-        const referenceImagePath = path.join(__dirname, '..', 'example.png');
-        if (fs.existsSync(referenceImagePath)) {
-          const referenceImageBuffer = await fs.promises.readFile(referenceImagePath);
-          formData.append('reference_image', referenceImageBuffer, {
-            filename: 'example.png',
-            contentType: 'image/png'
-          });
-        }
-      }
+      // Note: Reference image functionality removed for now to fix API compatibility
       
       formData.append('prompt', prompt);
       formData.append('size', '1024x1024');
