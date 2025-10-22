@@ -17,10 +17,6 @@
 
         body {
             background-color: #000000;
-            background-image: url('./example.png');
-            background-size: 100px 100px;
-            background-position: 50px 50px, 200px 100px, 350px 80px, 500px 120px, 650px 60px, 800px 140px, 950px 90px, 1100px 110px, 1250px 70px, 1400px 130px, 1550px 85px, 1700px 105px, 1850px 75px, 2000px 125px, 2150px 95px;
-            background-repeat: no-repeat;
             font-family: 'Inter', 'Impact', 'Arial Black', sans-serif;
             font-weight: 900;
             letter-spacing: 1px;
@@ -30,6 +26,42 @@
             --solana-purple: #9945FF;
             --solana-pink: #14F195;
         }
+        
+        .eyes-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+        
+        .eye-bg {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            background-image: url('./example.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            opacity: 0.6;
+        }
+        
+        .eye-bg:nth-child(1) { top: 10%; left: 5%; }
+        .eye-bg:nth-child(2) { top: 20%; left: 25%; }
+        .eye-bg:nth-child(3) { top: 15%; left: 45%; }
+        .eye-bg:nth-child(4) { top: 25%; left: 65%; }
+        .eye-bg:nth-child(5) { top: 10%; left: 85%; }
+        .eye-bg:nth-child(6) { top: 40%; left: 10%; }
+        .eye-bg:nth-child(7) { top: 50%; left: 30%; }
+        .eye-bg:nth-child(8) { top: 45%; left: 50%; }
+        .eye-bg:nth-child(9) { top: 55%; left: 70%; }
+        .eye-bg:nth-child(10) { top: 40%; left: 90%; }
+        .eye-bg:nth-child(11) { top: 70%; left: 15%; }
+        .eye-bg:nth-child(12) { top: 80%; left: 35%; }
+        .eye-bg:nth-child(13) { top: 75%; left: 55%; }
+        .eye-bg:nth-child(14) { top: 85%; left: 75%; }
+        .eye-bg:nth-child(15) { top: 70%; left: 95%; }
         
         body::before {
             content: '';
@@ -165,6 +197,203 @@
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
         }
         
+        .social-links {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+        
+        .social-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 20px;
+            background: linear-gradient(45deg, var(--solana-purple), var(--solana-pink));
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(153, 69, 255, 0.3);
+        }
+        
+        .social-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(153, 69, 255, 0.5);
+        }
+        
+        .x-btn:hover {
+            background: linear-gradient(45deg, #1DA1F2, #0d8bd9);
+        }
+        
+        .tiktok-btn:hover {
+            background: linear-gradient(45deg, #ff0050, #00f2ea);
+        }
+        
+        .bot-section {
+            max-width: 800px;
+            margin: 60px auto;
+            padding: 40px;
+            background: rgba(0, 0, 0, 0.7);
+            border: 3px solid rgba(153, 69, 255, 0.3);
+            border-radius: 15px;
+            color: white;
+        }
+        
+        .bot-container h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, var(--solana-purple), var(--solana-pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .bot-container p {
+            text-align: center;
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+        }
+        
+        .file-input-wrapper {
+            position: relative;
+            margin-bottom: 20px;
+        }
+        
+        .file-input {
+            position: absolute;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+        
+        .file-input-label {
+            display: block;
+            padding: 15px;
+            background: linear-gradient(45deg, var(--solana-purple), var(--solana-pink));
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 900;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+        }
+        
+        .file-input-label:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(153, 69, 255, 0.3);
+        }
+        
+        .style-selection {
+            margin-bottom: 20px;
+        }
+        
+        .style-selection h3 {
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+            text-transform: uppercase;
+        }
+        
+        .style-option {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(153, 69, 255, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        
+        .style-option.selected {
+            background: linear-gradient(45deg, var(--solana-purple), var(--solana-pink));
+            border-color: white;
+        }
+        
+        .style-option input {
+            display: none;
+        }
+        
+        .style-option label {
+            cursor: pointer;
+            font-weight: 900;
+            text-transform: uppercase;
+        }
+        
+        .generate-btn {
+            width: 100%;
+            padding: 20px;
+            background: linear-gradient(45deg, var(--solana-purple), var(--solana-pink));
+            border: none;
+            border-radius: 15px;
+            color: white;
+            font-size: 1.3rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            letter-spacing: 2px;
+        }
+        
+        .generate-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 25px rgba(153, 69, 255, 0.3);
+        }
+        
+        .generate-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .loading.show {
+            display: block;
+        }
+        
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid var(--solana-purple);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .result-section {
+            text-align: center;
+            margin-top: 30px;
+        }
+        
+        .result-section h3 {
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+            text-transform: uppercase;
+        }
+        
+        .result-image {
+            max-width: 100%;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+        
         @media (max-width: 768px) {
             .page-header h1 {
                 font-size: 2.5rem;
@@ -183,6 +412,23 @@
     </style>
 </head>
 <body>
+    <div class="eyes-background">
+        <div class="eye-bg"></div>
+        <div class="eye-bg"></div>
+        <div class="eye-bg"></div>
+        <div class="eye-bg"></div>
+        <div class="eye-bg"></div>
+        <div class="eye-bg"></div>
+        <div class="eye-bg"></div>
+        <div class="eye-bg"></div>
+        <div class="eye-bg"></div>
+        <div class="eye-bg"></div>
+        <div class="eye-bg"></div>
+        <div class="eye-bg"></div>
+        <div class="eye-bg"></div>
+        <div class="eye-bg"></div>
+        <div class="eye-bg"></div>
+    </div>
     <div class="shade" aria-hidden="true"></div>
     <main class="content" role="main">
         <header class="page-header">
@@ -244,9 +490,55 @@
             <blockquote>The mission is bigger than the mood.</blockquote>
         </section>
 
+        <section class="bot-section">
+            <div class="bot-container">
+                <h2>Solana Purple Eyes Bot</h2>
+                <p>Transform any photo with Solana purple laser eyes</p>
+                
+                <form id="transformForm" enctype="multipart/form-data">
+                    <div class="file-input-wrapper">
+                        <input type="file" id="imageInput" name="image" class="file-input" accept="image/*" required>
+                        <label for="imageInput" class="file-input-label">
+                            Choose Image File
+                        </label>
+                    </div>
+                    
+                    <div class="style-selection">
+                        <h3>Select Style</h3>
+                        <div class="style-options">
+                            <div class="style-option selected">
+                                <input type="radio" id="style1" name="style" value="purple-laser-eyes" checked>
+                                <label for="style1">Purple Laser Eyes 💜</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" id="generateBtn" class="generate-btn">Transform My Photo!</button>
+                </form>
+                
+                <div class="loading" id="loading">
+                    <div class="spinner"></div>
+                    <p>Generating your Solana purple laser eyes...</p>
+                </div>
+                
+                <div class="result-section" id="resultSection" style="display: none;">
+                    <h3>Your Solana Purple Eyes Transformation</h3>
+                    <img id="resultImage" class="result-image" alt="Generated Purple Laser Eyes">
+                </div>
+            </div>
+        </section>
+
         <footer class="page-footer">
             <p>Made for the Solana purple vibes. Stay bullish.</p>
-            <a href="/bot" class="bot-link">Create Solana Purple Eyes →</a>
+            
+            <div class="social-links">
+                <a href="https://x.com/soleyescto?s=21&t=48vqxl_6d7nwhrfyp5MOVA" target="_blank" rel="noopener" class="social-btn x-btn">
+                    <span>🐦</span> Follow on X
+                </a>
+                <a href="https://www.tiktok.com/@soleyes?_t=ZS-90lxKfL7brc&_r=1" target="_blank" rel="noopener" class="social-btn tiktok-btn">
+                    <span>🎵</span> Follow on TikTok
+                </a>
+            </div>
         </footer>
     </main>
 
@@ -270,6 +562,76 @@
         panBackground();
         window.addEventListener('scroll', panBackground, { passive: true });
         window.addEventListener('resize', panBackground);
+        
+        // Bot form functionality
+        const transformForm = document.getElementById('transformForm');
+        if (transformForm) {
+            transformForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                const formData = new FormData(this);
+                const generateBtn = document.getElementById('generateBtn');
+                const loading = document.getElementById('loading');
+                const resultSection = document.getElementById('resultSection');
+
+                // Show loading
+                if (generateBtn) {
+                    generateBtn.disabled = true;
+                    generateBtn.textContent = 'Generating...';
+                }
+                if (loading) {
+                    loading.classList.add('show');
+                }
+                if (resultSection) {
+                    resultSection.style.display = 'none';
+                }
+
+                try {
+                    const response = await fetch('/transform', {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+
+                    const result = await response.json();
+
+                    if (result.success) {
+                        // Display result
+                        const resultImage = document.getElementById('resultImage');
+                        if (resultImage) {
+                            const imageUrl = `/result/${result.image_id}`;
+                            resultImage.src = imageUrl;
+                            
+                            resultImage.onerror = function() {
+                                console.error('Failed to load image:', imageUrl);
+                                alert('Failed to load the generated image. Please try again.');
+                            };
+                        }
+                        if (resultSection) {
+                            resultSection.style.display = 'block';
+                        }
+                    } else {
+                        throw new Error(result.error || 'Transform failed');
+                    }
+
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('Failed to generate image. Please try again.');
+                } finally {
+                    // Hide loading
+                    if (generateBtn) {
+                        generateBtn.disabled = false;
+                        generateBtn.textContent = 'Transform My Photo!';
+                    }
+                    if (loading) {
+                        loading.classList.remove('show');
+                    }
+                }
+            });
+        }
     })();
     </script>
 </body>
