@@ -18,8 +18,8 @@
         body {
             background-color: #000000;
             background-image: url('./example.png');
-            background-size: contain;
-            background-position: center;
+            background-size: 200px 200px;
+            background-position: 20px 20px, 200px 100px, 400px 50px, 600px 150px, 800px 80px;
             background-repeat: no-repeat;
             background-attachment: fixed;
             font-family: 'Inter', 'Impact', 'Arial Black', sans-serif;
@@ -30,6 +30,29 @@
             overflow-x: hidden;
             --solana-purple: #9945FF;
             --solana-pink: #14F195;
+        }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('./example.png');
+            background-size: 150px 150px;
+            background-position: 50px 50px, 300px 200px, 550px 100px, 750px 250px, 950px 120px, 1200px 180px;
+            background-repeat: no-repeat;
+            opacity: 0.3;
+            z-index: -1;
+            animation: floatEyes 20s ease-in-out infinite;
+        }
+        
+        @keyframes floatEyes {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            25% { transform: translateY(-20px) rotate(2deg); }
+            50% { transform: translateY(-10px) rotate(-1deg); }
+            75% { transform: translateY(-15px) rotate(1deg); }
         }
         
         body::before {
