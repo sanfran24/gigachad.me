@@ -23,7 +23,7 @@
         }
 
         body {
-            background: url('./public/Screenshot 2025-10-23 122100.png') center/cover no-repeat fixed;
+            background: url('/Screenshot 2025-10-23 122100.png') center/cover no-repeat fixed;
             font-family: 'Impact', 'Arial Black', 'Helvetica', sans-serif;
             font-weight: 900;
             letter-spacing: 1px;
@@ -293,13 +293,33 @@
             <h3>Your Stonks Meme is Ready!</h3>
             <div style="position: relative; display: inline-block;">
                 <img id="resultImage" class="result-image" alt="Generated Stonks Meme">
-                <div id="tickerOverlay" style="position: absolute; top: 20px; left: 20px; background: rgba(0,0,0,0.8); color: white; padding: 10px; border-radius: 5px; font-weight: bold; font-size: 24px; display: none; cursor: move; user-select: none; border: 2px solid #fff; resize: both; overflow: hidden; min-width: 60px; min-height: 30px;"></div>
+                <div id="tickerOverlay" style="position: absolute; top: 20px; left: 20px; background: transparent; color: white; padding: 10px; border-radius: 5px; font-weight: bold; font-size: 24px; display: none; cursor: move; user-select: none; resize: both; overflow: hidden; min-width: 60px; min-height: 30px; text-shadow: 2px 2px 4px rgba(0,0,0,0.8);"></div>
             </div>
             
             <div style="margin-top: 20px;">
                 <h4>Add Stock Ticker:</h4>
-                <div id="tickerButtons" style="display: flex; flex-wrap: wrap; gap: 10px; margin: 20px 0; max-width: 600px;">
-                    <!-- Ticker buttons will be added here -->
+                
+                <!-- Custom ticker input -->
+                <div style="margin-bottom: 20px;">
+                    <input type="text" id="customTicker" placeholder="Enter custom ticker (e.g., YOURTICKER)" 
+                           style="padding: 10px; border: 2px solid var(--primary-blue); border-radius: 5px; font-size: 16px; width: 200px; margin-right: 10px;">
+                    <button onclick="addCustomTicker()" class="generate-btn" style="width: auto; padding: 10px 20px;">
+                        Add Custom Ticker
+                    </button>
+                </div>
+                
+                <div style="display: flex; gap: 20px; align-items: flex-start;">
+                    <div id="tickerButtons" style="display: flex; flex-wrap: wrap; gap: 10px; margin: 20px 0; max-width: 600px;">
+                        <!-- Ticker buttons will be added here -->
+                    </div>
+                    
+                    <!-- Size slider -->
+                    <div style="display: flex; flex-direction: column; align-items: center; margin-top: 20px;">
+                        <label style="color: var(--text-color); font-weight: bold; margin-bottom: 10px;">Text Size</label>
+                        <input type="range" id="textSizeSlider" min="12" max="72" value="24" 
+                               style="writing-mode: bt-lr; -webkit-appearance: slider-vertical; width: 20px; height: 200px; margin: 10px 0;">
+                        <div id="sizeDisplay" style="color: var(--text-color); font-size: 12px; margin-top: 10px;">24px</div>
+                    </div>
                 </div>
                 <button onclick="clearTicker()" class="generate-btn" style="width: auto; padding: 10px 20px; margin: 10px; background: #666;">
                     Clear Ticker
@@ -405,7 +425,7 @@
         function createTickerButtons() {
             const tickerContainer = document.getElementById('tickerButtons');
             tickerContainer.innerHTML = '';
-            
+
             stockTickers.forEach(ticker => {
                 const button = document.createElement('button');
                 button.textContent = ticker;
@@ -413,6 +433,25 @@
                 button.style.cssText = 'width: auto; padding: 8px 16px; margin: 5px; font-size: 14px; background: linear-gradient(45deg, var(--primary-blue), var(--accent-orange));';
                 button.onclick = () => addTickerToImage(ticker);
                 tickerContainer.appendChild(button);
+            });
+            
+            // Setup size slider
+            setupSizeSlider();
+        }
+        
+        function setupSizeSlider() {
+            const slider = document.getElementById('textSizeSlider');
+            const sizeDisplay = document.getElementById('sizeDisplay');
+            
+            slider.addEventListener('input', function() {
+                const size = this.value;
+                sizeDisplay.textContent = size + 'px';
+                
+                // Update ticker overlay if it exists
+                const overlay = document.getElementById('tickerOverlay');
+                if (overlay && overlay.style.display !== 'none') {
+                    overlay.style.fontSize = size + 'px';
+                }
             });
         }
         
@@ -423,6 +462,21 @@
             
             // Make it draggable
             makeDraggable(overlay);
+            
+            // Add resize observer to scale text with box size
+            addResizeObserver(overlay);
+        }
+        
+        function addCustomTicker() {
+            const customTickerInput = document.getElementById('customTicker');
+            const ticker = customTickerInput.value.trim().toUpperCase();
+            
+            if (ticker) {
+                addTickerToImage(ticker);
+                customTickerInput.value = ''; // Clear the input
+            } else {
+                alert('Please enter a ticker symbol');
+            }
         }
         
         function makeDraggable(element) {
@@ -465,6 +519,18 @@
                 initialY = currentY;
                 isDragging = false;
             }
+        }
+        
+        function addResizeObserver(element) {
+            const resizeObserver = new ResizeObserver(entries => {
+                for (let entry of entries) {
+                    const { width, height } = entry.contentRect;
+                    // Scale font size based on box size (minimum 12px, maximum 72px)
+                    const fontSize = Math.max(12, Math.min(72, Math.min(width, height) * 0.4));
+                    element.style.fontSize = fontSize + 'px';
+                }
+            });
+            resizeObserver.observe(element);
         }
         
         function clearTicker() {
