@@ -293,7 +293,7 @@
             <h3>Your Stonks Meme is Ready!</h3>
             <div style="position: relative; display: inline-block;">
                 <img id="resultImage" class="result-image" alt="Generated Stonks Meme">
-                <div id="tickerOverlay" style="position: absolute; top: 20px; left: 20px; background: rgba(0,0,0,0.8); color: white; padding: 10px; border-radius: 5px; font-weight: bold; font-size: 24px; display: none;"></div>
+                <div id="tickerOverlay" style="position: absolute; top: 20px; left: 20px; background: rgba(0,0,0,0.8); color: white; padding: 10px; border-radius: 5px; font-weight: bold; font-size: 24px; display: none; cursor: move; user-select: none; border: 2px solid #fff; resize: both; overflow: hidden; min-width: 60px; min-height: 30px;"></div>
             </div>
             
             <div style="margin-top: 20px;">
@@ -420,6 +420,51 @@
             const overlay = document.getElementById('tickerOverlay');
             overlay.textContent = ticker;
             overlay.style.display = 'block';
+            
+            // Make it draggable
+            makeDraggable(overlay);
+        }
+        
+        function makeDraggable(element) {
+            let isDragging = false;
+            let currentX;
+            let currentY;
+            let initialX;
+            let initialY;
+            let xOffset = 0;
+            let yOffset = 0;
+
+            element.addEventListener('mousedown', dragStart);
+            document.addEventListener('mousemove', drag);
+            document.addEventListener('mouseup', dragEnd);
+
+            function dragStart(e) {
+                initialX = e.clientX - xOffset;
+                initialY = e.clientY - yOffset;
+
+                if (e.target === element) {
+                    isDragging = true;
+                }
+            }
+
+            function drag(e) {
+                if (isDragging) {
+                    e.preventDefault();
+                    currentX = e.clientX - initialX;
+                    currentY = e.clientY - initialY;
+
+                    xOffset = currentX;
+                    yOffset = currentY;
+
+                    element.style.transform = `translate3d(${currentX}px, ${currentY}px, 0)`;
+                }
+            }
+
+            function dragEnd(e) {
+                initialX = currentX;
+                initialY = currentY;
+                isDragging = false;
+            }
         }
         
         function clearTicker() {
