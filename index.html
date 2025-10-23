@@ -3,12 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BNB Wojackk Energy</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 16 16%22><text y=%2214%22 font-size=%2216%22>💪</text></svg>">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <title>Stonks Meme Generator</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 16 16%22><text y=%2214%22 font-size=%2216%22>📈</text></svg>">
     <style>
+        :root {
+            --primary-blue: #0066cc;
+            --accent-orange: #ff6600;
+            --dark-bg: #1a1a1a;
+            --light-text: #ffffff;
+            --text-color: #ffffff;
+            --card-bg: rgba(0, 0, 0, 0.8);
+            --card-border: rgba(255, 255, 255, 0.3);
+        }
+        
         * {
             margin: 0;
             padding: 0;
@@ -16,303 +23,138 @@
         }
 
         body {
-            background-color: #000000;
-            font-family: 'Inter', 'Impact', 'Arial Black', sans-serif;
+            background: url('/Screenshot 2025-10-23 122100.png') center/cover no-repeat fixed;
+            font-family: 'Impact', 'Arial Black', 'Helvetica', sans-serif;
             font-weight: 900;
             letter-spacing: 1px;
             min-height: 100vh;
+            color: var(--text-color);
             position: relative;
-            overflow-x: hidden;
-            --solana-purple: #9945FF;
-            --solana-pink: #14F195;
         }
         
-        .eyes-background {
+        .stonks-background {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             z-index: -1;
-            pointer-events: none;
+            background: rgba(0, 0, 0, 0.4);
         }
         
-        .eye-bg {
-            position: absolute;
-            width: 80px;
-            height: 80px;
-            background-image: url('./example.png');
-            background-size: contain;
-            background-repeat: no-repeat;
-            opacity: 0.6;
-        }
-        
-        .eye-bg:nth-child(1) { top: 10%; left: 5%; }
-        .eye-bg:nth-child(2) { top: 20%; left: 25%; }
-        .eye-bg:nth-child(3) { top: 15%; left: 45%; }
-        .eye-bg:nth-child(4) { top: 25%; left: 65%; }
-        .eye-bg:nth-child(5) { top: 10%; left: 85%; }
-        .eye-bg:nth-child(6) { top: 40%; left: 10%; }
-        .eye-bg:nth-child(7) { top: 50%; left: 30%; }
-        .eye-bg:nth-child(8) { top: 45%; left: 50%; }
-        .eye-bg:nth-child(9) { top: 55%; left: 70%; }
-        .eye-bg:nth-child(10) { top: 40%; left: 90%; }
-        .eye-bg:nth-child(11) { top: 70%; left: 15%; }
-        .eye-bg:nth-child(12) { top: 80%; left: 35%; }
-        .eye-bg:nth-child(13) { top: 75%; left: 55%; }
-        .eye-bg:nth-child(14) { top: 85%; left: 75%; }
-        .eye-bg:nth-child(15) { top: 70%; left: 95%; }
-        
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.3);
-            z-index: -1;
-        }
-        
-        .shade {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(45deg, rgba(0,0,0,0.1), rgba(0,0,0,0.3));
-            z-index: -1;
-        }
-        
-        .content {
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
             position: relative;
             z-index: 1;
-            min-height: 100vh;
-            padding: 40px 20px;
         }
         
-        .page-header {
+        .header {
             text-align: center;
-            margin-bottom: 60px;
-            color: white;
-            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8);
+            margin-bottom: 40px;
         }
         
-        .page-header h1 {
+        .header h1 {
             font-size: 4rem;
-            margin: 0;
-            text-transform: uppercase;
-            letter-spacing: 4px;
-            font-weight: 900;
-            background: linear-gradient(45deg, var(--solana-purple), var(--solana-pink));
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, var(--primary-blue), var(--accent-orange));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            animation: glow 2s ease-in-out infinite alternate;
         }
         
-        .page-header p {
+        @keyframes glow {
+            from { text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); }
+            to { text-shadow: 2px 2px 20px var(--primary-blue), 2px 2px 4px rgba(0, 0, 0, 0.5); }
+        }
+        
+        .header p {
             font-size: 1.4rem;
-            margin: 20px 0;
-            font-weight: 700;
+            color: rgba(255, 255, 255, 0.9);
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
         }
         
-        .quotes {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            margin-bottom: 60px;
-        }
-        
-        blockquote {
-            background: rgba(0, 0, 0, 0.7);
-            border: 3px solid rgba(255, 255, 255, 0.3);
-            border-radius: 15px;
-            padding: 25px;
-            color: white;
-            font-size: 1.2rem;
-            font-weight: 700;
-            text-align: center;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
-            position: relative;
-            transform: rotate(0deg);
-            transition: all 0.3s ease;
-            animation: float 6s ease-in-out infinite;
-        }
-        
-        blockquote:nth-child(odd) {
-            transform: rotate(-2deg);
-            animation-delay: -2s;
-        }
-        
-        blockquote:nth-child(even) {
-            transform: rotate(2deg);
-            animation-delay: -4s;
-        }
-        
-        blockquote:nth-child(3n) {
-            transform: rotate(1deg);
-            animation-delay: -1s;
-        }
-        
-        blockquote:nth-child(5n) {
-            transform: rotate(-1deg);
-            animation-delay: -3s;
-        }
-        
-        @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(var(--rotation, 0deg)); }
-            50% { transform: translateY(-10px) rotate(var(--rotation, 0deg)); }
-        }
-        
-        .page-footer {
-            text-align: center;
-            margin-top: 60px;
-            color: white;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
-        }
-        
-        .page-footer p {
-            font-size: 1.1rem;
-            font-weight: 700;
-        }
-        
-        .bot-link {
-            display: inline-block;
-            margin-top: 30px;
-            padding: 15px 30px;
-            background: linear-gradient(45deg, var(--solana-purple), var(--solana-pink));
-            color: white;
-            text-decoration: none;
-            border-radius: 10px;
-            font-weight: 900;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(153, 69, 255, 0.3);
-        }
-        
-        .bot-link:hover {
-            transform: scale(1.05);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
-        }
-        
-        .social-links {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-            margin-top: 30px;
-        }
-        
-        .social-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 12px 20px;
-            background: linear-gradient(45deg, var(--solana-purple), var(--solana-pink));
-            color: white;
-            text-decoration: none;
-            border-radius: 25px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(153, 69, 255, 0.3);
-        }
-        
-        .social-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 6px 20px rgba(153, 69, 255, 0.5);
-        }
-        
-        .x-btn:hover {
-            background: linear-gradient(45deg, #1DA1F2, #0d8bd9);
-        }
-        
-        .tiktok-btn:hover {
-            background: linear-gradient(45deg, #ff0050, #00f2ea);
-        }
-        
-        .bot-section {
-            max-width: 800px;
-            margin: 60px auto;
+        .upload-section {
+            background: var(--card-bg);
+            border: 2px solid var(--card-border);
+            border-radius: 20px;
             padding: 40px;
-            background: rgba(0, 0, 0, 0.7);
-            border: 3px solid rgba(153, 69, 255, 0.3);
-            border-radius: 15px;
-            color: white;
+            margin: 40px 0;
+            backdrop-filter: blur(10px);
         }
         
-        .bot-container h2 {
+        .upload-section h2 {
             text-align: center;
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            background: linear-gradient(45deg, var(--solana-purple), var(--solana-pink));
+            font-size: 2rem;
+            margin-bottom: 30px;
+            background: linear-gradient(45deg, var(--primary-blue), var(--accent-orange));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-        }
-        
-        .bot-container p {
-            text-align: center;
-            font-size: 1.2rem;
-            margin-bottom: 30px;
         }
         
         .file-input-wrapper {
             position: relative;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
         }
         
         .file-input {
-            position: absolute;
-            opacity: 0;
-            width: 100%;
-            height: 100%;
-            cursor: pointer;
+            display: none;
         }
         
         .file-input-label {
             display: block;
-            padding: 15px;
-            background: linear-gradient(45deg, var(--solana-purple), var(--solana-pink));
-            border: none;
-            border-radius: 10px;
+            background: linear-gradient(45deg, var(--primary-blue), var(--accent-orange));
             color: white;
-            font-size: 1.1rem;
-            font-weight: 900;
+            padding: 20px;
+            border-radius: 10px;
             text-align: center;
             cursor: pointer;
-            transition: all 0.3s ease;
+            font-size: 1.2rem;
             text-transform: uppercase;
+            transition: all 0.3s ease;
         }
         
         .file-input-label:hover {
-            transform: scale(1.05);
-            box-shadow: 0 5px 15px rgba(153, 69, 255, 0.3);
+            transform: scale(1.02);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
         }
         
         .style-selection {
-            margin-bottom: 20px;
+            margin-bottom: 30px;
         }
         
         .style-selection h3 {
-            margin-bottom: 15px;
-            font-size: 1.3rem;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            text-align: center;
             text-transform: uppercase;
+        }
+        
+        .style-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
         }
         
         .style-option {
             background: rgba(255, 255, 255, 0.1);
-            border: 2px solid rgba(153, 69, 255, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.3);
             border-radius: 10px;
-            padding: 15px;
+            padding: 20px;
             cursor: pointer;
             transition: all 0.3s ease;
             text-align: center;
         }
         
+        .style-option:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.02);
+        }
+        
         .style-option.selected {
-            background: linear-gradient(45deg, var(--solana-purple), var(--solana-pink));
+            background: linear-gradient(45deg, var(--primary-blue), var(--accent-orange));
             border-color: white;
         }
         
@@ -324,26 +166,26 @@
             cursor: pointer;
             font-weight: 900;
             text-transform: uppercase;
+            font-size: 1.1rem;
         }
         
         .generate-btn {
             width: 100%;
-            padding: 20px;
-            background: linear-gradient(45deg, var(--solana-purple), var(--solana-pink));
-            border: none;
-            border-radius: 15px;
+            background: linear-gradient(45deg, var(--primary-blue), var(--accent-orange));
             color: white;
+            border: none;
+            padding: 20px;
             font-size: 1.3rem;
             font-weight: 900;
             text-transform: uppercase;
+            border-radius: 10px;
             cursor: pointer;
             transition: all 0.3s ease;
-            letter-spacing: 2px;
         }
         
         .generate-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 10px 25px rgba(153, 69, 255, 0.3);
+            transform: scale(1.02);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
         }
         
         .generate-btn:disabled {
@@ -364,7 +206,7 @@
         
         .spinner {
             border: 4px solid rgba(255, 255, 255, 0.3);
-            border-top: 4px solid var(--solana-purple);
+            border-top: 4px solid var(--primary-blue);
             border-radius: 50%;
             width: 40px;
             height: 40px;
@@ -395,106 +237,26 @@
         }
         
         @media (max-width: 768px) {
-            .page-header h1 {
-                font-size: 2.5rem;
-            }
-            
-            .quotes {
-                grid-template-columns: 1fr;
-                gap: 20px;
-            }
-            
-            blockquote {
-                font-size: 1rem;
-                padding: 20px;
-            }
+            .container { padding: 20px; }
+            .header h1 { font-size: 2.5rem; }
+            .header p { font-size: 1rem; }
+            .style-options { grid-template-columns: 1fr; }
+            .generate-btn { padding: 16px; font-size: 1.1rem; }
+            .file-input-label { padding: 12px; font-size: 1rem; }
         }
     </style>
 </head>
 <body>
-    <div class="eyes-background">
-        <div class="eye-bg"></div>
-        <div class="eye-bg"></div>
-        <div class="eye-bg"></div>
-        <div class="eye-bg"></div>
-        <div class="eye-bg"></div>
-        <div class="eye-bg"></div>
-        <div class="eye-bg"></div>
-        <div class="eye-bg"></div>
-        <div class="eye-bg"></div>
-        <div class="eye-bg"></div>
-        <div class="eye-bg"></div>
-        <div class="eye-bg"></div>
-        <div class="eye-bg"></div>
-        <div class="eye-bg"></div>
-        <div class="eye-bg"></div>
+    <div class="stonks-background"></div>
+    
+    <div class="container">
+        <div class="header">
+            <h1>Stonks Meme Generator</h1>
+            <p>Transform your photo into the classic Stonks meme!</p>
     </div>
-    <div class="shade" aria-hidden="true"></div>
-    <main class="content" role="main">
-        <header class="page-header">
-            <h1>Solana Purple Eyes</h1>
-            <p>Scroll to channel the Solana purple energy. Wallpaper pans as you go.</p>
-        </header>
-
-        <section class="quotes" aria-label="BNB Wojackk Quotes">
-            <blockquote>Become the kind of person your future self thanks.</blockquote>
-            <blockquote>Discipline beats motivation. Show up, no matter what.</blockquote>
-            <blockquote>Comfort is a cage. Step out and grow.</blockquote>
-            <blockquote>Results talk. Excuses walk.</blockquote>
-            <blockquote>Grind in silence. Let success be the noise.</blockquote>
-            <blockquote>One more rep. One more page. One more step.</blockquote>
-            <blockquote>You're not tired. You're just untrained.</blockquote>
-            <blockquote>Stay dangerous. Stay humble.</blockquote>
-            <blockquote>Pressure creates diamonds. Embrace it.</blockquote>
-            <blockquote>Win the morning. Win the day.</blockquote>
-            <blockquote>Keep promises you make to yourself.</blockquote>
-            <blockquote>Small habits. Massive outcomes.</blockquote>
-            <blockquote>Suffer now. Live like a king later.</blockquote>
-            <blockquote>Focus is the new superpower.</blockquote>
-            <blockquote>Be so consistent it looks like magic.</blockquote>
-            <blockquote>Hunger over comfort. Always.</blockquote>
-            <blockquote>Your standards build your reality.</blockquote>
-            <blockquote>Prove your doubt wrong.</blockquote>
-            <blockquote>Choose pain of discipline over pain of regret.</blockquote>
-            <blockquote>Earn your confidence daily.</blockquote>
-            <blockquote>Hard choices, easy life. Easy choices, hard life.</blockquote>
-            <blockquote>Train your mind harder than your body.</blockquote>
-            <blockquote>Silence the inner critic with action.</blockquote>
-            <blockquote>Make progress too obvious to ignore.</blockquote>
-            <blockquote>Your future is counting on you.</blockquote>
-            <blockquote>Delete distractions. Build momentum.</blockquote>
-            <blockquote>Respect is earned, not demanded.</blockquote>
-            <blockquote>Be reliable. Be relentless.</blockquote>
-            <blockquote>High standards. Zero drama.</blockquote>
-            <blockquote>Keep it moving. No emotional luggage.</blockquote>
-            <blockquote>Own your mornings. Own your life.</blockquote>
-            <blockquote>Hustle quietly, dominate loudly.</blockquote>
-            <blockquote>Character is what you do when no one is watching.</blockquote>
-            <blockquote>Reps make results.</blockquote>
-            <blockquote>Stop negotiating with your goals.</blockquote>
-            <blockquote>Get uncomfortable, get unstoppable.</blockquote>
-            <blockquote>Mindset first. Skillset second.</blockquote>
-            <blockquote>Dreams demand receipts.</blockquote>
-            <blockquote>Work until your idols become rivals.</blockquote>
-            <blockquote>Outwork your old self.</blockquote>
-            <blockquote>Ruthless with habits. Kind with people.</blockquote>
-            <blockquote>Stand tall. Speak less. Do more.</blockquote>
-            <blockquote>Your pace is fine; just don't stop.</blockquote>
-            <blockquote>Eat discipline for breakfast.</blockquote>
-            <blockquote>Make effort your baseline.</blockquote>
-            <blockquote>Momentum loves consistency.</blockquote>
-            <blockquote>Keep going. You're closer than you think.</blockquote>
-            <blockquote>Be the calm in the chaos.</blockquote>
-            <blockquote>Nobody is coming. Build yourself.</blockquote>
-            <blockquote>Winners do it tired.</blockquote>
-            <blockquote>The mission is bigger than the mood.</blockquote>
-        </section>
-
-        <section class="bot-section">
-            <div class="bot-container">
-                <h2>Solana Purple Eyes Bot</h2>
-                <p>Transform any photo with Solana purple laser eyes</p>
-                
+        
+        <div class="upload-section">
+            <h2>Create Your Stonks Meme</h2>
                 <form id="transformForm" enctype="multipart/form-data">
                     <div class="file-input-wrapper">
                         <input type="file" id="imageInput" name="image" class="file-input" accept="image/*" required>
@@ -507,70 +269,54 @@
                         <h3>Select Style</h3>
                         <div class="style-options">
                             <div class="style-option selected">
-                                <input type="radio" id="style1" name="style" value="stonks-red" checked>
-                                <label for="style1">Stonks Red 📉</label>
-                            </div>
-                            <div class="style-option">
-                                <input type="radio" id="style2" name="style" value="stonks-green">
-                                <label for="style2">Stonks Green 📈</label>
+                            <input type="radio" id="style1" name="style" value="stonks-red" checked>
+                            <label for="style1">Stonks Red 📉</label>
+                        </div>
+                        <div class="style-option">
+                            <input type="radio" id="style2" name="style" value="stonks-green">
+                            <label for="style2">Stonks Green 📈</label>
                             </div>
                         </div>
                     </div>
                     
                     <button type="submit" id="generateBtn" class="generate-btn">Transform My Photo!</button>
                 </form>
+        </div>
                 
                 <div class="loading" id="loading">
                     <div class="spinner"></div>
-                    <p>Generating your Solana purple laser eyes...</p>
+            <p>Generating your Stonks masterpiece...</p>
+            <p class="loading-time">⏱️ This may take 1-4 minutes via AI</p>
                 </div>
                 
                 <div class="result-section" id="resultSection" style="display: none;">
-                    <h3>Your Solana Purple Eyes Transformation</h3>
-                    <img id="resultImage" class="result-image" alt="Generated Purple Laser Eyes">
-                </div>
+            <h3>Your Stonks Meme is Ready!</h3>
+            <img id="resultImage" class="result-image" alt="Generated Stonks Meme">
+            <div style="margin-top: 20px;">
+                <button onclick="downloadImage()" class="generate-btn" style="width: auto; padding: 10px 20px; margin: 10px;">
+                    Download Image
+                </button>
             </div>
-        </section>
-
-        <footer class="page-footer">
-            <p>Made for the Solana purple vibes. Stay bullish.</p>
-            
-            <div class="social-links">
-                <a href="https://x.com/soleyescto?s=21&t=48vqxl_6d7nwhrfyp5MOVA" target="_blank" rel="noopener" class="social-btn x-btn">
-                    <span>🐦</span> Follow on X
-                </a>
-                <a href="https://www.tiktok.com/@soleyes?_t=ZS-90lxKfL7brc&_r=1" target="_blank" rel="noopener" class="social-btn tiktok-btn">
-                    <span>🎵</span> Follow on TikTok
-                </a>
+        </div>
             </div>
-        </footer>
-    </main>
 
     <script>
-    (function() {
-        function panBackground() {
-            var body = document.body;
-            var html = document.documentElement;
-            var scrollTop = window.pageYOffset || html.scrollTop || body.scrollTop || 0;
-            var docHeight = Math.max(
-                body.scrollHeight, body.offsetHeight,
-                html.clientHeight, html.scrollHeight, html.offsetHeight
-            );
-            var winHeight = window.innerHeight || html.clientHeight || 1;
-            var maxScroll = Math.max(docHeight - winHeight, 1);
-            var progress = Math.min(Math.max(scrollTop / maxScroll, 0), 1);
-            var y = (progress * 100).toFixed(2) + '%';
-            body.style.backgroundPosition = 'center ' + y;
-        }
-
-        panBackground();
-        window.addEventListener('scroll', panBackground, { passive: true });
-        window.addEventListener('resize', panBackground);
+        let currentImageId = null;
         
-        // Bot form functionality
-        const transformForm = document.getElementById('transformForm');
-        if (transformForm) {
-            transformForm.addEventListener('submit', async function(e) {
+        // Style selection handling
+        document.querySelectorAll('.style-option').forEach(option => {
+            option.addEventListener('click', function() {
+                // Remove selected class from all options
+                document.querySelectorAll('.style-option').forEach(opt => opt.classList.remove('selected'));
+                // Add selected class to clicked option
+                this.classList.add('selected');
+                // Check the radio button
+                this.querySelector('input[type="radio"]').checked = true;
+            });
+        });
+        
+        // Form submission
+        document.getElementById('transformForm').addEventListener('submit', async function(e) {
                 e.preventDefault();
                 
                 const formData = new FormData(this);
@@ -579,16 +325,10 @@
                 const resultSection = document.getElementById('resultSection');
 
                 // Show loading
-                if (generateBtn) {
                     generateBtn.disabled = true;
                     generateBtn.textContent = 'Generating...';
-                }
-                if (loading) {
                     loading.classList.add('show');
-                }
-                if (resultSection) {
                     resultSection.style.display = 'none';
-                }
 
                 try {
                     const response = await fetch('/transform', {
@@ -596,47 +336,62 @@
                         body: formData
                     });
 
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-
-                    const result = await response.json();
-
-                    if (result.success) {
-                        // Display result
-                        const resultImage = document.getElementById('resultImage');
-                        if (resultImage) {
-                            const imageUrl = `/result/${result.image_id}`;
-                            resultImage.src = imageUrl;
-                            
-                            resultImage.onerror = function() {
-                                console.error('Failed to load image:', imageUrl);
-                                alert('Failed to load the generated image. Please try again.');
-                            };
-                        }
-                        if (resultSection) {
-                            resultSection.style.display = 'block';
-                        }
+                const data = await response.json();
+                
+                if (data.success) {
+                    currentImageId = data.imageId;
+                    // Poll for result
+                    pollForResult(data.imageId);
                     } else {
-                        throw new Error(result.error || 'Transform failed');
+                    throw new Error(data.error || 'Generation failed');
                     }
-
                 } catch (error) {
                     console.error('Error:', error);
-                    alert('Failed to generate image. Please try again.');
-                } finally {
-                    // Hide loading
-                    if (generateBtn) {
+                alert('Error: ' + error.message);
                         generateBtn.disabled = false;
                         generateBtn.textContent = 'Transform My Photo!';
-                    }
-                    if (loading) {
                         loading.classList.remove('show');
                     }
+        });
+        
+        async function pollForResult(imageId) {
+            try {
+                const response = await fetch(`/result/${imageId}`);
+                
+                if (response.ok) {
+                    const blob = await response.blob();
+                    const imageUrl = URL.createObjectURL(blob);
+                    
+                    document.getElementById('resultImage').src = imageUrl;
+                    document.getElementById('resultSection').style.display = 'block';
+                    document.getElementById('loading').classList.remove('show');
+                    
+                    // Reset button
+                    document.getElementById('generateBtn').disabled = false;
+                    document.getElementById('generateBtn').textContent = 'Transform My Photo!';
+                } else if (response.status === 202) {
+                    // Still processing, wait and try again
+                    setTimeout(() => pollForResult(imageId), 2000);
+                } else {
+                    throw new Error('Failed to get result');
                 }
-            });
+            } catch (error) {
+                console.error('Error polling for result:', error);
+                alert('Error getting result: ' + error.message);
+                document.getElementById('generateBtn').disabled = false;
+                document.getElementById('generateBtn').textContent = 'Transform My Photo!';
+                document.getElementById('loading').classList.remove('show');
+            }
         }
-    })();
+        
+        function downloadImage() {
+            if (currentImageId) {
+                const link = document.createElement('a');
+                link.href = `/result/${currentImageId}`;
+                link.download = `stonks-meme-${currentImageId}.png`;
+                link.click();
+            }
+        }
     </script>
 </body>
 </html>
