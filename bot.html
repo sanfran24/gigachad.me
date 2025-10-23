@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stonks Meme Bot - Transform Your Photo</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 16 16%22><text y=%2214%22 font-size=%2216%22>📈</text></svg>">
+    <style>
+        :root {
+            --accent1: #ff6b6b;
+            --accent2: #4ecdc4;
+            --accent3: #45b7d1;
+            --accent4: #96ceb4;
+            --text-color: #ffffff;
+            --card-bg: rgba(0, 0, 0, 0.7);
+            --card-border: rgba(255, 255, 255, 0.3);
+        }
+        body {
+            background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+            font-family: 'Impact', 'Arial Black', 'Helvetica', sans-serif;
+            font-weight: 900;
+            letter-spacing: 1px;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            position: relative;
+            color: var(--text-color);
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            color: var(--text-color);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+        }
+        
+        .header h1 {
+            font-size: 3rem;
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            background: linear-gradient(45deg, var(--accent1), var(--accent2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .header p {
+            font-size: 1.2rem;
+            margin: 10px 0;
+        }
+        
+        .upload-section {
+            background: rgba(0, 0, 0, 0.7);
+            border: 3px solid var(--card-border);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .file-input-wrapper {
+            position: relative;
+            margin-bottom: 30px;
+        }
+        
+        .file-input {
+            display: none;
+        }
+        
+        .file-input-label {
+            display: block;
+            background: linear-gradient(45deg, var(--accent1), var(--accent2));
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+        }
+        
+        .file-input-label:hover {
+            transform: scale(1.02);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .style-selection {
+            margin-bottom: 30px;
+        }
+        
+        .style-selection h3 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            text-align: center;
+            text-transform: uppercase;
+        }
+        
+        .style-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+        
+        .style-option {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        
+        .style-option:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.02);
+        }
+        
+        .style-option.selected {
+            background: linear-gradient(45deg, var(--accent1), var(--accent2));
+            border-color: white;
+        }
+        
+        .style-option input {
+            display: none;
+        }
+        
+        .style-option label {
+            cursor: pointer;
+            font-weight: 900;
+            text-transform: uppercase;
+            font-size: 1.1rem;
+        }
+        
+        .generate-btn {
+            width: 100%;
+            background: linear-gradient(45deg, var(--accent3), var(--accent4));
+            color: white;
+            border: none;
+            padding: 20px;
+            font-size: 1.3rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .generate-btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .generate-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .loading.show {
+            display: block;
+        }
+        
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid var(--accent1);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .result-section {
+            text-align: center;
+            margin-top: 30px;
+        }
+        
+        .result-section h3 {
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+            text-transform: uppercase;
+        }
+        
+        .result-image {
+            max-width: 100%;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+        
+        @media (max-width: 768px) {
+            .container { padding: 12px; }
+            .header h1 { font-size: 2.2rem; }
+            .header p { font-size: 1rem; }
+            .style-options { grid-template-columns: 1fr; }
+            .generate-btn { padding: 16px; font-size: 1.1rem; }
+            .file-input-label { padding: 12px; font-size: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Stonks Meme Bot</h1>
+            <p>Transform your photo into the classic Stonks meme!</p>
+        </div>
+        
+        <div class="upload-section">
+            <form id="transformForm" enctype="multipart/form-data">
+                <div class="file-input-wrapper">
+                    <input type="file" id="imageInput" name="image" class="file-input" accept="image/*" required>
+                    <label for="imageInput" class="file-input-label">
+                        Choose Image File
+                    </label>
+                </div>
+                
+                <div class="style-selection">
+                    <h3>Select Style</h3>
+                    <div class="style-options">
+                        <div class="style-option selected">
+                            <input type="radio" id="style1" name="style" value="stonks-red" checked>
+                            <label for="style1">Stonks Red 📉</label>
+                        </div>
+                        <div class="style-option">
+                            <input type="radio" id="style2" name="style" value="stonks-green">
+                            <label for="style2">Stonks Green 📈</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <button type="submit" id="generateBtn" class="generate-btn">Transform My Photo!</button>
+            </form>
+        </div>
+        
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>Generating your Stonks masterpiece...</p>
+            <p class="loading-time">⏱️ This may take 1-4 minutes via AI</p>
+        </div>
+        
+        <div class="result-section" id="resultSection" style="display: none;">
+            <h3>Your Stonks Meme is Ready!</h3>
+            <img id="resultImage" class="result-image" alt="Generated Stonks Meme">
+            <div style="margin-top: 20px;">
+                <button onclick="downloadImage()" class="generate-btn" style="width: auto; padding: 10px 20px; margin: 10px;">
+                    Download Image
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentImageId = null;
+        
+        // Style selection handling
+        document.querySelectorAll('.style-option').forEach(option => {
+            option.addEventListener('click', function() {
+                // Remove selected class from all options
+                document.querySelectorAll('.style-option').forEach(opt => opt.classList.remove('selected'));
+                // Add selected class to clicked option
+                this.classList.add('selected');
+                // Check the radio button
+                this.querySelector('input[type="radio"]').checked = true;
+            });
+        });
+        
+        // Form submission
+        document.getElementById('transformForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const generateBtn = document.getElementById('generateBtn');
+            const loading = document.getElementById('loading');
+            const resultSection = document.getElementById('resultSection');
+            
+            // Show loading
+            generateBtn.disabled = true;
+            generateBtn.textContent = 'Generating...';
+            loading.classList.add('show');
+            resultSection.style.display = 'none';
+            
+            try {
+                const response = await fetch('/transform', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    currentImageId = data.imageId;
+                    // Poll for result
+                    pollForResult(data.imageId);
+                } else {
+                    throw new Error(data.error || 'Generation failed');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error: ' + error.message);
+                generateBtn.disabled = false;
+                generateBtn.textContent = 'Transform My Photo!';
+                loading.classList.remove('show');
+            }
+        });
+        
+        async function pollForResult(imageId) {
+            try {
+                const response = await fetch(`/result/${imageId}`);
+                
+                if (response.ok) {
+                    const blob = await response.blob();
+                    const imageUrl = URL.createObjectURL(blob);
+                    
+                    document.getElementById('resultImage').src = imageUrl;
+                    document.getElementById('resultSection').style.display = 'block';
+                    document.getElementById('loading').classList.remove('show');
+                    
+                    // Reset button
+                    document.getElementById('generateBtn').disabled = false;
+                    document.getElementById('generateBtn').textContent = 'Transform My Photo!';
+                } else if (response.status === 202) {
+                    // Still processing, wait and try again
+                    setTimeout(() => pollForResult(imageId), 2000);
+                } else {
+                    throw new Error('Failed to get result');
+                }
+            } catch (error) {
+                console.error('Error polling for result:', error);
+                alert('Error getting result: ' + error.message);
+                document.getElementById('generateBtn').disabled = false;
+                document.getElementById('generateBtn').textContent = 'Transform My Photo!';
+                document.getElementById('loading').classList.remove('show');
+            }
+        }
+        
+        function downloadImage() {
+            if (currentImageId) {
+                const link = document.createElement('a');
+                link.href = `/result/${currentImageId}`;
+                link.download = `stonks-meme-${currentImageId}.png`;
+                link.click();
+            }
+        }
+    </script>
+</body>
+</html>
