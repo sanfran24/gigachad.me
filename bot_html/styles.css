@@ -1,0 +1,559 @@
+/* Reset and base styles */
+:root {
+    --accent1: #ff6b6b;
+    --accent2: #4ecdc4;
+    --accent3: #45b7d1;
+    --accent4: #96ceb4;
+    --text-color: #ffffff;
+    --bg-overlay: rgba(0, 0, 0, 0.4);
+    --card-bg: rgba(0, 0, 0, 0.7);
+    --card-border: rgba(255, 255, 255, 0.3);
+}
+
+/* Themes override variables */
+body.theme-default {
+    --accent1: #ff6b6b;
+    --accent2: #4ecdc4;
+    --accent3: #45b7d1;
+    --accent4: #96ceb4;
+}
+
+body.theme-gold {
+    --accent1: #f59e0b;
+    --accent2: #fde68a;
+    --accent3: #d97706;
+    --accent4: #fbbf24;
+}
+
+body.theme-purple {
+    --accent1: #a78bfa;
+    --accent2: #f0abfc;
+    --accent3: #7c3aed;
+    --accent4: #c4b5fd;
+}
+
+body.theme-ocean {
+    --accent1: #22d3ee;
+    --accent2: #34d399;
+    --accent3: #0ea5e9;
+    --accent4: #60a5fa;
+}
+
+body.theme-binance {
+    --accent1: #f3ba2f; /* Binance Yellow */
+    --accent2: #fde68a; /* Soft Yellow */
+    --accent3: #f59e0b; /* Amber */
+    --accent4: #fef3c7; /* Pale Yellow */
+    --card-border: rgba(243, 186, 47, 0.38);
+}
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Impact', 'Arial Black', 'Helvetica', sans-serif;
+    font-weight: 900;
+    letter-spacing: 1px;
+    line-height: 1.6;
+    color: var(--text-color);
+    background-image: url('./bnb_bg.png?v=1');
+    background-size: 25% 25%;
+    background-repeat: repeat;
+    background-position: top left;
+    background-attachment: fixed;
+    min-height: 100vh;
+    position: relative;
+}
+
+/* Prevent scrolling while intro video plays */
+body.no-scroll {
+    overflow: hidden;
+    height: 100vh;
+}
+
+/* Landing page styles */
+.landing-page {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+}
+
+.landing-content {
+    text-align: center;
+    color: white;
+}
+
+.landing-title {
+    font-size: 4rem;
+    font-weight: 900;
+    margin: 0 0 1rem 0;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+    background: linear-gradient(45deg, var(--accent1), var(--accent2), var(--accent3));
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: gradientShift 3s ease-in-out infinite;
+}
+
+.landing-subtitle {
+    font-size: 1.5rem;
+    margin: 0 0 3rem 0;
+    font-weight: 300;
+    opacity: 0.9;
+}
+
+.gigachad-button {
+    background: linear-gradient(45deg, var(--accent1), var(--accent2));
+    border: none;
+    padding: 20px 40px;
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: var(--text-color);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    touch-action: manipulation;
+}
+
+.gigachad-button:hover {
+    transform: scale(1.1);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+}
+
+.gigachad-button:active {
+    transform: scale(0.95);
+}
+
+@keyframes gradientShift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+/* Intro video overlay styles */
+.intro-video {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    object-fit: cover !important;
+    z-index: 9999 !important;
+    background: #000 !important;
+    border: none !important;
+    outline: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    display: block !important;
+}
+
+/* When video is not hidden, ensure it covers everything */
+.intro-video:not(.hidden) {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    z-index: 9999 !important;
+}
+
+/* Main content styles */
+.main-content {
+    position: relative;
+    z-index: 100;
+}
+
+/* Hidden class */
+.hidden {
+    display: none !important;
+}
+
+/* Kill any stray background videos/overlays injected by hosts or builders (but not our intro video) */
+.background-video, #bg-video {
+    display: none !important;
+    pointer-events: none !important;
+}
+
+/* Shade overlay for better text readability */
+.shade {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--bg-overlay);
+    z-index: -1;
+}
+
+/* Main content */
+.content {
+    position: relative;
+    z-index: 1;
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Header */
+.page-header {
+    text-align: center;
+    margin-bottom: 60px;
+    padding: 40px 20px;
+    background: rgba(0, 0, 0, 0.6);
+    border-radius: 20px;
+    border: 3px solid var(--card-border);
+    backdrop-filter: blur(10px);
+}
+
+.page-header h1 {
+    font-size: 4rem;
+    margin-bottom: 20px;
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8);
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    background: linear-gradient(45deg, var(--accent1), var(--accent2), var(--accent3), var(--accent4));
+    background-size: 400% 400%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: gradientShift 3s ease-in-out infinite;
+}
+
+@keyframes gradientShift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+.page-header p {
+    font-size: 1.4rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+/* Quotes section */
+.quotes {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    margin-bottom: 60px;
+}
+
+.quote-card {
+    background: var(--card-bg);
+    border: 3px solid var(--card-border);
+    border-radius: 20px;
+    padding: 30px;
+    text-align: center;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.quote-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transition: left 0.5s ease;
+}
+
+.quote-card:hover::before {
+    left: 100%;
+}
+
+.quote-card:hover {
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+    border-color: rgba(255, 255, 255, 0.6);
+}
+
+.quote-card blockquote {
+    font-size: 1.3rem;
+    font-style: italic;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    line-height: 1.4;
+    position: relative;
+    z-index: 1;
+}
+
+.quote-card blockquote::before {
+    content: '"';
+    font-size: 3rem;
+    color: rgba(255, 255, 255, 0.3);
+    position: absolute;
+    top: -20px;
+    left: -10px;
+    font-family: serif;
+}
+
+.quote-card blockquote::after {
+    content: '"';
+    font-size: 3rem;
+    color: rgba(255, 255, 255, 0.3);
+    position: absolute;
+    bottom: -30px;
+    right: -10px;
+    font-family: serif;
+}
+
+/* Bot connection section */
+.bot-connection {
+    text-align: center;
+    margin-top: 60px;
+}
+
+.bot-card {
+    background: var(--card-bg);
+    border: 3px solid var(--card-border);
+    border-radius: 20px;
+    padding: 40px;
+    backdrop-filter: blur(10px);
+    max-width: 600px;
+    margin: 0 auto;
+    transition: all 0.3s ease;
+}
+
+.bot-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+    border-color: rgba(255, 255, 255, 0.6);
+}
+
+.bot-card h2 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    background: linear-gradient(45deg, var(--accent1), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.bot-card p {
+    font-size: 1.2rem;
+    margin-bottom: 30px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.bot-button {
+    display: inline-block;
+    padding: 20px 40px;
+    background: linear-gradient(45deg, var(--accent1), var(--accent2));
+    color: var(--text-color);
+    text-decoration: none;
+    border-radius: 15px;
+    font-size: 1.3rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.bot-button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+    text-decoration: none;
+    color: var(--text-color);
+}
+
+/* AI Generation Warning */
+.ai-warning {
+    background: linear-gradient(135deg, var(--accent1), var(--accent2));
+    border: 2px solid var(--card-border);
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 30px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    color: var(--text-color);
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.warning-icon {
+    font-size: 2rem;
+    animation: pulse 2s infinite;
+}
+
+.warning-text {
+    flex: 1;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.warning-text strong {
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+.loading-time {
+    font-size: 0.9rem;
+    opacity: 0.8;
+    margin-top: 10px;
+    font-style: italic;
+}
+
+/* Chain banner */
+.chain-banner {
+    background: linear-gradient(90deg, var(--accent1), var(--accent2));
+    color: #111;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border: 2px solid var(--card-border);
+    border-radius: 12px;
+    padding: 14px 18px;
+    margin: 0 0 24px 0;
+    text-align: center;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+}
+
+/* Binance theme contrast tweaks */
+.theme-binance .ai-warning { color: #111; text-shadow: none; }
+.theme-binance .bot-card { border-color: var(--card-border); }
+.theme-binance .quote-card { border-color: var(--card-border); }
+
+/* Theme switcher UI */
+.theme-switcher {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    z-index: 2100;
+}
+
+.theme-switcher select {
+    background: rgba(0, 0, 0, 0.6);
+    color: var(--text-color);
+    border: 2px solid var(--card-border);
+    border-radius: 10px;
+    padding: 10px 12px;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    /* Landing page */
+    .landing-title {
+        font-size: 2.6rem;
+        letter-spacing: 2px;
+    }
+    .landing-subtitle {
+        font-size: 1.1rem;
+        margin-bottom: 2rem;
+    }
+    .gigachad-button {
+        padding: 16px 28px;
+        font-size: 1.1rem;
+        border-radius: 40px;
+    }
+    .page-header h1 {
+        font-size: 2.5rem;
+        letter-spacing: 2px;
+}
+
+.page-header p {
+        font-size: 1.1rem;
+}
+
+.quotes {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .quote-card {
+        padding: 20px;
+    }
+    
+    .quote-card blockquote {
+        font-size: 1.1rem;
+    }
+    
+    .bot-card h2 {
+        font-size: 2rem;
+    }
+    
+    .bot-button {
+        padding: 15px 30px;
+        font-size: 1.1rem;
+    }
+    .bot-card {
+        margin: 0 12px;
+        padding: 28px;
+    }
+}
+
+@media (max-width: 480px) {
+    .content {
+        padding: 10px;
+    }
+    
+    .page-header {
+        padding: 20px 15px;
+        margin-bottom: 40px;
+    }
+    
+    .page-header h1 {
+        font-size: 2rem;
+        letter-spacing: 1px;
+    }
+    .landing-title {
+        font-size: 2.1rem;
+    }
+    .landing-subtitle {
+        font-size: 1rem;
+    }
+    .gigachad-button {
+        padding: 14px 22px;
+        font-size: 1rem;
+    }
+    
+    .quote-card {
+        padding: 15px;
+    }
+    
+    .quote-card blockquote {
+        font-size: 1rem;
+    }
+    
+    .bot-card {
+        padding: 20px;
+    }
+    
+    .bot-card h2 {
+        font-size: 1.8rem;
+    }
+    .bot-button {
+        padding: 14px 22px;
+        font-size: 1rem;
+    }
+}
