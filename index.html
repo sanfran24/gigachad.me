@@ -23,7 +23,7 @@
         }
 
         body {
-            background: url('/Screenshot 2025-10-23 122100.png') center/cover no-repeat fixed;
+            background: linear-gradient(135deg, var(--dark-bg), #2d2d2d, var(--dark-bg));
             font-family: 'Impact', 'Arial Black', 'Helvetica', sans-serif;
             font-weight: 900;
             letter-spacing: 1px;
@@ -291,8 +291,19 @@
                 
                 <div class="result-section" id="resultSection" style="display: none;">
             <h3>Your Stonks Meme is Ready!</h3>
-            <img id="resultImage" class="result-image" alt="Generated Stonks Meme">
+            <div style="position: relative; display: inline-block;">
+                <img id="resultImage" class="result-image" alt="Generated Stonks Meme">
+                <div id="tickerOverlay" style="position: absolute; top: 20px; left: 20px; background: rgba(0,0,0,0.8); color: white; padding: 10px; border-radius: 5px; font-weight: bold; font-size: 24px; display: none;"></div>
+            </div>
+            
             <div style="margin-top: 20px;">
+                <h4>Add Stock Ticker:</h4>
+                <div id="tickerButtons" style="display: flex; flex-wrap: wrap; gap: 10px; margin: 20px 0; max-width: 600px;">
+                    <!-- Ticker buttons will be added here -->
+                </div>
+                <button onclick="clearTicker()" class="generate-btn" style="width: auto; padding: 10px 20px; margin: 10px; background: #666;">
+                    Clear Ticker
+                </button>
                 <button onclick="downloadImage()" class="generate-btn" style="width: auto; padding: 10px 20px; margin: 10px;">
                     Download Image
                 </button>
@@ -302,6 +313,7 @@
 
     <script>
         let currentImageId = null;
+        const stockTickers = ['NVDA', 'MSFT', 'AAPL', 'GOOGL', 'AMZN', 'META', 'AVGO', 'TSLA', 'TSM', 'BRK.B', 'WMT', 'JPM', 'ORCL', 'LLY', 'V', 'MA', 'XOM', 'NFLX', 'JNJ', 'PLTR', 'COST', 'ABBV', 'ASML', 'BABA', 'HD', 'BAC', 'AMD', 'PG', 'UNH', 'GE', 'SAP', 'CVX', 'KO', 'CSCO', 'WFC', 'TM', 'AZN', 'IBM', 'NVS', 'MS', 'TMUS', 'CRM', 'PM', 'AXP', 'CAT', 'RTX', 'NVO', 'GS', 'MU', 'HSBC'];
         
         // Style selection handling
         document.querySelectorAll('.style-option').forEach(option => {
@@ -339,9 +351,11 @@
                 const data = await response.json();
                 
                 if (data.success) {
-                    currentImageId = data.imageId;
+                    console.log('Server response:', data);
+                    currentImageId = data.image_id;
+                    console.log('Image ID:', data.image_id);
                     // Poll for result
-                    pollForResult(data.imageId);
+                    pollForResult(data.image_id);
                     } else {
                     throw new Error(data.error || 'Generation failed');
                     }
@@ -356,6 +370,7 @@
         
         async function pollForResult(imageId) {
             try {
+                console.log('Polling for result with imageId:', imageId);
                 const response = await fetch(`/result/${imageId}`);
                 
                 if (response.ok) {
@@ -365,6 +380,9 @@
                     document.getElementById('resultImage').src = imageUrl;
                     document.getElementById('resultSection').style.display = 'block';
                     document.getElementById('loading').classList.remove('show');
+                    
+                    // Create ticker buttons
+                    createTickerButtons();
                     
                     // Reset button
                     document.getElementById('generateBtn').disabled = false;
@@ -382,6 +400,32 @@
                 document.getElementById('generateBtn').textContent = 'Transform My Photo!';
                 document.getElementById('loading').classList.remove('show');
             }
+        }
+        
+        function createTickerButtons() {
+            const tickerContainer = document.getElementById('tickerButtons');
+            tickerContainer.innerHTML = '';
+            
+            stockTickers.forEach(ticker => {
+                const button = document.createElement('button');
+                button.textContent = ticker;
+                button.className = 'generate-btn';
+                button.style.cssText = 'width: auto; padding: 8px 16px; margin: 5px; font-size: 14px; background: linear-gradient(45deg, var(--primary-blue), var(--accent-orange));';
+                button.onclick = () => addTickerToImage(ticker);
+                tickerContainer.appendChild(button);
+            });
+        }
+        
+        function addTickerToImage(ticker) {
+            const overlay = document.getElementById('tickerOverlay');
+            overlay.textContent = ticker;
+            overlay.style.display = 'block';
+        }
+        
+        function clearTicker() {
+            const overlay = document.getElementById('tickerOverlay');
+            overlay.style.display = 'none';
+            overlay.textContent = '';
         }
         
         function downloadImage() {
