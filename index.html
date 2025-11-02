@@ -3,17 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stonks Meme Generator</title>
+    <title>Just Put My Fries In The Bag Bro Meme Generator</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 16 16%22><text y=%2214%22 font-size=%2216%22>📈</text></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-blue: #0066cc;
-            --accent-orange: #ff6600;
-            --dark-bg: #1a1a1a;
-            --light-text: #ffffff;
-            --text-color: #ffffff;
-            --card-bg: rgba(0, 0, 0, 0.8);
-            --card-border: rgba(255, 255, 255, 0.3);
+            --mcdonalds-red: #DA020E;
+            --mcdonalds-yellow: #FFC72C;
+            --mcdonalds-dark: #27251F;
+            --text-color: #27251F;
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --card-border: var(--mcdonalds-red);
         }
         
         * {
@@ -23,23 +25,77 @@
         }
 
         body {
-            background: url('/Screenshot 2025-10-23 122100.png') center/cover no-repeat fixed;
-            font-family: 'Impact', 'Arial Black', 'Helvetica', sans-serif;
-            font-weight: 900;
-            letter-spacing: 1px;
+            font-family: 'Arial', 'Helvetica Neue', sans-serif;
+            font-weight: 400;
             min-height: 100vh;
             color: var(--text-color);
             position: relative;
+            margin: 0;
+            padding: 0;
         }
         
-        .stonks-background {
+        .red-banner {
+            background: var(--mcdonalds-red);
+            width: 100%;
+            padding: 30px 20px;
+            text-align: center;
+            border-bottom: 3px solid #000;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .red-banner .mcdonalds-title {
+            font-family: 'Bebas Neue', 'Arial Black', sans-serif;
+            font-size: 4.5rem;
+            font-weight: 900;
+            color: var(--mcdonalds-yellow);
+            letter-spacing: 3px;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 0px #000;
+        }
+        
+        .red-banner .careers-text {
+            font-size: 1.1rem;
+            color: #000;
+            font-weight: 600;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+        
+        .red-banner .subtitle-text {
+            font-size: 0.95rem;
+            color: #000;
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+        
+        .mcdonalds-background {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: -1;
-            background: rgba(0, 0, 0, 0.4);
+            z-index: 0;
+            overflow: hidden;
+        }
+        
+        .golden-arches {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(8);
+            width: 400px;
+            height: 400px;
+            opacity: 0.25;
+            z-index: 0;
+            pointer-events: none;
+        }
+        
+        .golden-arches svg {
+            width: 100%;
+            height: 100%;
+            stroke: #FFD700;
+            fill: none;
         }
         
         .container {
@@ -47,7 +103,9 @@
             margin: 0 auto;
             padding: 40px 20px;
             position: relative;
-            z-index: 1;
+            z-index: 2;
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 10px;
         }
         
         .header {
@@ -56,42 +114,75 @@
         }
         
         .header h1 {
-            font-size: 4rem;
-            margin-bottom: 20px;
-            background: linear-gradient(45deg, var(--primary-blue), var(--accent-orange));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-            animation: glow 2s ease-in-out infinite alternate;
+            font-size: 3.5rem;
+            margin-bottom: 15px;
+            color: var(--mcdonalds-red);
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 3px 3px 0px var(--mcdonalds-yellow);
         }
         
-        @keyframes glow {
-            from { text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); }
-            to { text-shadow: 2px 2px 20px var(--primary-blue), 2px 2px 4px rgba(0, 0, 0, 0.5); }
+        .header .subtitle {
+            font-size: 1.2rem;
+            color: var(--mcdonalds-dark);
+            font-weight: 600;
+            margin-bottom: 10px;
         }
         
         .header p {
-            font-size: 1.4rem;
-            color: rgba(255, 255, 255, 0.9);
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+            font-size: 1rem;
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        .solana-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #14F195, #9945FF);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            margin-top: 10px;
         }
         
         .upload-section {
             background: var(--card-bg);
-            border: 2px solid var(--card-border);
-            border-radius: 20px;
+            border: 4px solid var(--mcdonalds-red);
+            border-radius: 15px;
             padding: 40px;
             margin: 40px 0;
-            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 30px rgba(218, 2, 14, 0.2);
         }
         
         .upload-section h2 {
             text-align: center;
             font-size: 2rem;
+            margin-bottom: 20px;
+            color: var(--mcdonalds-red);
+            font-weight: 900;
+            text-transform: uppercase;
+        }
+        
+        .upload-section .job-description {
+            background: #f5f5f5;
+            border-left: 4px solid var(--mcdonalds-yellow);
+            padding: 20px;
             margin-bottom: 30px;
-            background: linear-gradient(45deg, var(--primary-blue), var(--accent-orange));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            border-radius: 8px;
+        }
+        
+        .upload-section .job-description h3 {
+            color: var(--mcdonalds-dark);
+            margin-bottom: 10px;
+            font-size: 1.3rem;
+        }
+        
+        .upload-section .job-description p {
+            color: #555;
+            line-height: 1.8;
+            margin-bottom: 8px;
         }
         
         .file-input-wrapper {
@@ -105,20 +196,23 @@
         
         .file-input-label {
             display: block;
-            background: linear-gradient(45deg, var(--primary-blue), var(--accent-orange));
+            background: var(--mcdonalds-red);
             color: white;
             padding: 20px;
             border-radius: 10px;
             text-align: center;
             cursor: pointer;
             font-size: 1.2rem;
+            font-weight: bold;
             text-transform: uppercase;
             transition: all 0.3s ease;
+            border: 3px solid var(--mcdonalds-yellow);
         }
         
         .file-input-label:hover {
             transform: scale(1.02);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 5px 15px rgba(218, 2, 14, 0.4);
+            background: #B8000A;
         }
         
         .style-selection {
@@ -171,9 +265,9 @@
         
         .generate-btn {
             width: 100%;
-            background: linear-gradient(45deg, var(--primary-blue), var(--accent-orange));
-            color: white;
-            border: none;
+            background: var(--mcdonalds-yellow);
+            color: var(--mcdonalds-red);
+            border: 3px solid var(--mcdonalds-red);
             padding: 20px;
             font-size: 1.3rem;
             font-weight: 900;
@@ -185,7 +279,8 @@
         
         .generate-btn:hover {
             transform: scale(1.02);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 5px 15px rgba(255, 199, 44, 0.5);
+            background: #FFD700;
         }
         
         .generate-btn:disabled {
@@ -205,8 +300,8 @@
         }
         
         .spinner {
-            border: 4px solid rgba(255, 255, 255, 0.3);
-            border-top: 4px solid var(--primary-blue);
+            border: 4px solid rgba(218, 2, 14, 0.3);
+            border-top: 4px solid var(--mcdonalds-red);
             border-radius: 50%;
             width: 40px;
             height: 40px;
@@ -247,17 +342,27 @@
     </style>
 </head>
 <body>
-    <div class="stonks-background"></div>
+    <div class="mcdonalds-background">
+        <div class="golden-arches">
+            <svg viewBox="0 0 240 200" xmlns="http://www.w3.org/2000/svg">
+                <!-- Left arch -->
+                <path d="M 20 180 Q 20 20 80 20 Q 120 60 120 100" stroke="currentColor" stroke-width="25" fill="none" stroke-linecap="round"/>
+                <!-- Right arch -->
+                <path d="M 120 100 Q 120 60 160 20 Q 220 20 220 180" stroke="currentColor" stroke-width="25" fill="none" stroke-linecap="round"/>
+            </svg>
+        </div>
+    </div>
     
     <div class="container">
         <div class="header">
-            <h1>Stonks Meme Generator</h1>
-            <p>Transform your photo into the classic Stonks meme!</p>
-    </div>
+            <h1>Just Put My Fries In The Bag Bro Meme Generator</h1>
+            <p>Transform yourself into the McDonald's employee from the "Just put my fries in the bag bro" meme!</p>
+        </div>
         
         <div class="upload-section">
-            <h2>Create Your Stonks Meme</h2>
-                <form id="transformForm" enctype="multipart/form-data">
+            <h2>Create Your Meme</h2>
+            
+                <form id="transformForm" enctype="multipart/form-data" onsubmit="event.preventDefault(); return false;">
                     <div class="file-input-wrapper">
                         <input type="file" id="imageInput" name="image" class="file-input" accept="image/*" required>
                         <label for="imageInput" class="file-input-label">
@@ -265,19 +370,7 @@
                         </label>
                     </div>
                     
-                    <div class="style-selection">
-                        <h3>Select Style</h3>
-                        <div class="style-options">
-                            <div class="style-option selected">
-                            <input type="radio" id="style1" name="style" value="stonks-red" checked>
-                            <label for="style1">Stonks Red 📉</label>
-                        </div>
-                        <div class="style-option">
-                            <input type="radio" id="style2" name="style" value="stonks-green">
-                            <label for="style2">Stonks Green 📈</label>
-                            </div>
-                        </div>
-                    </div>
+                    <input type="hidden" name="style" value="freakbob">
                     
                     <button type="submit" id="generateBtn" class="generate-btn">Transform My Photo!</button>
                 </form>
@@ -285,47 +378,19 @@
                 
                 <div class="loading" id="loading">
                     <div class="spinner"></div>
-            <p>Generating your Stonks masterpiece...</p>
+            <p>Generating your meme...</p>
             <p class="loading-time">⏱️ This may take 1-4 minutes via AI</p>
                 </div>
                 
                 <div class="result-section" id="resultSection" style="display: none;">
-            <h3>Your Stonks Meme is Ready!</h3>
+            <h3>Your Meme is Ready!</h3>
             <div style="position: relative; display: inline-block;">
-                <img id="resultImage" class="result-image" alt="Generated Stonks Meme">
-                <div id="tickerOverlay" style="position: absolute; top: 20px; left: 20px; background: transparent; color: white; padding: 10px; border-radius: 5px; font-weight: bold; font-size: 24px; display: none; cursor: move; user-select: none; resize: both; overflow: hidden; min-width: 60px; min-height: 30px; text-shadow: 2px 2px 4px rgba(0,0,0,0.8);"></div>
+                <img id="resultImage" class="result-image" alt="Generated Meme">
             </div>
             
             <div style="margin-top: 20px;">
-                <h4>Add Stock Ticker:</h4>
-                
-                <!-- Custom ticker input -->
-                <div style="margin-bottom: 20px;">
-                    <input type="text" id="customTicker" placeholder="Enter custom ticker (e.g., YOURTICKER)" 
-                           style="padding: 10px; border: 2px solid var(--primary-blue); border-radius: 5px; font-size: 16px; width: 200px; margin-right: 10px;">
-                    <button onclick="addCustomTicker()" class="generate-btn" style="width: auto; padding: 10px 20px;">
-                        Add Custom Ticker
-                    </button>
-                </div>
-                
-                <div style="display: flex; gap: 20px; align-items: flex-start;">
-                    <div id="tickerButtons" style="display: flex; flex-wrap: wrap; gap: 10px; margin: 20px 0; max-width: 600px;">
-                        <!-- Ticker buttons will be added here -->
-                    </div>
-                    
-                    <!-- Size slider -->
-                    <div style="display: flex; flex-direction: column; align-items: center; margin-top: 20px;">
-                        <label style="color: var(--text-color); font-weight: bold; margin-bottom: 10px;">Text Size</label>
-                        <input type="range" id="textSizeSlider" min="12" max="72" value="24" 
-                               style="writing-mode: bt-lr; -webkit-appearance: slider-vertical; width: 20px; height: 200px; margin: 10px 0;">
-                        <div id="sizeDisplay" style="color: var(--text-color); font-size: 12px; margin-top: 10px;">24px</div>
-                    </div>
-                </div>
-                <button onclick="clearTicker()" class="generate-btn" style="width: auto; padding: 10px 20px; margin: 10px; background: #666;">
-                    Clear Ticker
-                </button>
                 <button onclick="downloadImage()" class="generate-btn" style="width: auto; padding: 10px 20px; margin: 10px;">
-                    Download Image
+                    📥 Save Your New Employee Photo! 📥
                 </button>
             </div>
         </div>
@@ -333,19 +398,6 @@
 
     <script>
         let currentImageId = null;
-        const stockTickers = ['NVDA', 'MSFT', 'AAPL', 'GOOGL', 'AMZN', 'META', 'AVGO', 'TSLA', 'TSM', 'BRK.B', 'WMT', 'JPM', 'ORCL', 'LLY', 'V', 'MA', 'XOM', 'NFLX', 'JNJ', 'PLTR', 'COST', 'ABBV', 'ASML', 'BABA', 'HD', 'BAC', 'AMD', 'PG', 'UNH', 'GE', 'SAP', 'CVX', 'KO', 'CSCO', 'WFC', 'TM', 'AZN', 'IBM', 'NVS', 'MS', 'TMUS', 'CRM', 'PM', 'AXP', 'CAT', 'RTX', 'NVO', 'GS', 'MU', 'HSBC'];
-        
-        // Style selection handling
-        document.querySelectorAll('.style-option').forEach(option => {
-            option.addEventListener('click', function() {
-                // Remove selected class from all options
-                document.querySelectorAll('.style-option').forEach(opt => opt.classList.remove('selected'));
-                // Add selected class to clicked option
-                this.classList.add('selected');
-                // Check the radio button
-                this.querySelector('input[type="radio"]').checked = true;
-            });
-        });
         
         // Form submission
         document.getElementById('transformForm').addEventListener('submit', async function(e) {
@@ -355,6 +407,13 @@
                 const generateBtn = document.getElementById('generateBtn');
                 const loading = document.getElementById('loading');
                 const resultSection = document.getElementById('resultSection');
+
+                // Validate file was selected
+                const fileInput = document.getElementById('imageInput');
+                if (!fileInput.files || !fileInput.files[0]) {
+                    alert('Please select an image file first!');
+                    return;
+                }
 
                 // Show loading
                     generateBtn.disabled = true;
@@ -401,9 +460,6 @@
                     document.getElementById('resultSection').style.display = 'block';
                     document.getElementById('loading').classList.remove('show');
                     
-                    // Create ticker buttons
-                    createTickerButtons();
-                    
                     // Reset button
                     document.getElementById('generateBtn').disabled = false;
                     document.getElementById('generateBtn').textContent = 'Transform My Photo!';
@@ -422,128 +478,13 @@
             }
         }
         
-        function createTickerButtons() {
-            const tickerContainer = document.getElementById('tickerButtons');
-            tickerContainer.innerHTML = '';
-
-            stockTickers.forEach(ticker => {
-                const button = document.createElement('button');
-                button.textContent = ticker;
-                button.className = 'generate-btn';
-                button.style.cssText = 'width: auto; padding: 8px 16px; margin: 5px; font-size: 14px; background: linear-gradient(45deg, var(--primary-blue), var(--accent-orange));';
-                button.onclick = () => addTickerToImage(ticker);
-                tickerContainer.appendChild(button);
-            });
-            
-            // Setup size slider
-            setupSizeSlider();
-        }
         
-        function setupSizeSlider() {
-            const slider = document.getElementById('textSizeSlider');
-            const sizeDisplay = document.getElementById('sizeDisplay');
-            
-            slider.addEventListener('input', function() {
-                const size = this.value;
-                sizeDisplay.textContent = size + 'px';
-                
-                // Update ticker overlay if it exists
-                const overlay = document.getElementById('tickerOverlay');
-                if (overlay && overlay.style.display !== 'none') {
-                    overlay.style.fontSize = size + 'px';
-                }
-            });
-        }
-        
-        function addTickerToImage(ticker) {
-            const overlay = document.getElementById('tickerOverlay');
-            overlay.textContent = ticker;
-            overlay.style.display = 'block';
-            
-            // Make it draggable
-            makeDraggable(overlay);
-            
-            // Add resize observer to scale text with box size
-            addResizeObserver(overlay);
-        }
-        
-        function addCustomTicker() {
-            const customTickerInput = document.getElementById('customTicker');
-            const ticker = customTickerInput.value.trim().toUpperCase();
-            
-            if (ticker) {
-                addTickerToImage(ticker);
-                customTickerInput.value = ''; // Clear the input
-            } else {
-                alert('Please enter a ticker symbol');
-            }
-        }
-        
-        function makeDraggable(element) {
-            let isDragging = false;
-            let currentX;
-            let currentY;
-            let initialX;
-            let initialY;
-            let xOffset = 0;
-            let yOffset = 0;
-
-            element.addEventListener('mousedown', dragStart);
-            document.addEventListener('mousemove', drag);
-            document.addEventListener('mouseup', dragEnd);
-
-            function dragStart(e) {
-                initialX = e.clientX - xOffset;
-                initialY = e.clientY - yOffset;
-
-                if (e.target === element) {
-                    isDragging = true;
-                }
-            }
-
-            function drag(e) {
-                if (isDragging) {
-                    e.preventDefault();
-                    currentX = e.clientX - initialX;
-                    currentY = e.clientY - initialY;
-
-                    xOffset = currentX;
-                    yOffset = currentY;
-
-                    element.style.transform = `translate3d(${currentX}px, ${currentY}px, 0)`;
-                }
-            }
-
-            function dragEnd(e) {
-                initialX = currentX;
-                initialY = currentY;
-                isDragging = false;
-            }
-        }
-        
-        function addResizeObserver(element) {
-            const resizeObserver = new ResizeObserver(entries => {
-                for (let entry of entries) {
-                    const { width, height } = entry.contentRect;
-                    // Scale font size based on box size (minimum 12px, maximum 72px)
-                    const fontSize = Math.max(12, Math.min(72, Math.min(width, height) * 0.4));
-                    element.style.fontSize = fontSize + 'px';
-                }
-            });
-            resizeObserver.observe(element);
-        }
-        
-        function clearTicker() {
-            const overlay = document.getElementById('tickerOverlay');
-            overlay.style.display = 'none';
-            overlay.textContent = '';
-        }
         
         function downloadImage() {
             if (currentImageId) {
                 const link = document.createElement('a');
                 link.href = `/result/${currentImageId}`;
-                link.download = `stonks-meme-${currentImageId}.png`;
+                link.download = `fries-in-bag-meme-${currentImageId}.png`;
                 link.click();
             }
         }

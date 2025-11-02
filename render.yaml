@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: gigachad-bot
+    name: putmyfriesinthebag
     env: node
     plan: free
     buildCommand: npm install
