@@ -1,7 +1,7 @@
 {
   "name": "gigachad-bot",
   "version": "1.0.0",
-  "description": "Just Put My Fries In The Bag Bro Meme Generator - Transform yourself into the McDonald's employee",
+  "description": "Just Put The Fries In The Bag Bro Meme Generator - Transform yourself into the McDonald's employee",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
